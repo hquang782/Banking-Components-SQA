@@ -7,7 +7,6 @@ import org.springframework.security.config.annotation.authentication.configurati
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
-import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
@@ -30,7 +29,7 @@ public class SecurityConfig {
         http.csrf((csrf) -> csrf.disable()) // Vô hiệu hóa CSRF protection
                 .authorizeHttpRequests( // Cấu hình quyền truy cập cho các request
                         (authorize) -> authorize
-                                .requestMatchers("/api/v1/**").permitAll() // Cho phép tất cả các request tới "/api/v1/student/list/" không cần xác thực
+                                .requestMatchers("/api/v1/**").permitAll() // Cho phép tất cả các request tới "/api/v1/" không cần xác thực
                                 .requestMatchers("/api/auth/**").permitAll() // Cho phép tất cả các request tới "/api/auth/" không cần xác thực
 //                    .requestMatchers(HttpMethod.GET, "/menu/**").hasRole("ADMIN") // Cấu hình quyền truy cập dựa trên vai trò người dùng
                                 .anyRequest().authenticated() // Các request khác cần phải được xác thực

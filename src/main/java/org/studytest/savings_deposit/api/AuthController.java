@@ -27,8 +27,4 @@ public class AuthController {
         String response = authService.register(registerDto);
         return new ResponseEntity<>(response, HttpStatus.CREATED);
     }
-    @GetMapping("/get")
-    public String test(){
-        return "done";
-    }
 }

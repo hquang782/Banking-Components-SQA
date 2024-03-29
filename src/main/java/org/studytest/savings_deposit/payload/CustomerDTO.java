@@ -1,15 +1,19 @@
 package org.studytest.savings_deposit.payload;
 
+
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.studytest.savings_deposit.models.Account;
+
+
 
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class RegisterDto {
+public class CustomerDTO {
     private String fullName;
     private Integer age;
     private String gender;
@@ -19,6 +23,5 @@ public class RegisterDto {
     private String phoneNumber;
     private String identificationNumber;
     private String bankAccountNumber;
-    private String username;
-    private String password;
+    private Account account;
 }
