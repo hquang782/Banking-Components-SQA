@@ -33,12 +33,6 @@ public class CustomerController {
         return customerOptional.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
     }
 
-    // Tạo một khách hàng mới
-//    @PostMapping
-//    @ResponseStatus(HttpStatus.CREATED)
-//    public String createCustomer(@RequestBody CustomerDTO customerDTO) {
-//        return customerService.createCustomer(customerDTO);
-//    }
 
     // Cập nhật thông tin của một khách hàng
     @PutMapping("/{id}")

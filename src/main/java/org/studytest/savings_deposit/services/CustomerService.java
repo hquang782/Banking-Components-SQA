@@ -13,4 +13,5 @@ public interface CustomerService {
     Customer updateCustomer(Long id,Customer customer);
     String deleteCustomer(Long id);
     Optional<Customer> getCustomerByIdentificationNumber(String identificationNumber);
+    Optional<Customer> getCustomerByBankAccountNumber(String bankAccountNumber);
 }

@@ -40,10 +40,16 @@ public class AuthServiceImpl implements AuthService {
             return "Invalid username or password";
         }
     }
-
+    private boolean isValidUser(String username, String password) {
+        // Lấy tài khoản từ username
+        Optional<Account> optionalAccount = accountRepository.findByUsername(username);
+        // Kiểm tra xem tài khoản có tồn tại và mật khẩu có khớp không
+        String encodedPassword = optionalAccount.get().getPassword();
+        return passwordEncoder.matches(password, encodedPassword);
+    }
     @Override
     public String register(RegisterDto registerDto) {
-        if (isUsernameAvailable(registerDto.getUsername(),registerDto.getIdentificationNumber())) {
+        if (isUsernameAvailable(registerDto.getUsername(),registerDto.getIdentificationNumber(),registerDto.getBankAccountNumber())) {
             Account account = createAccount(registerDto.getUsername(), registerDto.getPassword());
             CustomerDTO customerDTO = new CustomerDTO();
             customerDTO.setFullName(registerDto.getFullName());
@@ -59,24 +65,14 @@ public class AuthServiceImpl implements AuthService {
             System.out.println(customerService.createCustomer(customerDTO));
             return "Registration successful";
         } else {
-            return "Username already exists or identification number has bees use";
+            return "Username, identification number, or bank account number already exists";
         }
     }
 
-
-
-    private boolean isValidUser(String username, String password) {
-        // Lấy tài khoản từ username
-        Optional<Account> optionalAccount = accountRepository.findByUsername(username);
-        // Kiểm tra xem tài khoản có tồn tại và mật khẩu có khớp không
-        String encodedPassword = optionalAccount.get().getPassword();
-        return optionalAccount.isPresent() && passwordEncoder.matches(password, encodedPassword);
-    }
-
-    private boolean isUsernameAvailable(String username,String identificationNumber) {
+    private boolean isUsernameAvailable(String username,String identificationNumber,String bankAccountNumber) {
         // Kiểm tra xem username có tồn tại hay không hoặc căn cước đã được sử dụng
         return !accountRepository.existsByUsername(username) &&
-                customerService.getCustomerByIdentificationNumber(identificationNumber).isEmpty();
+                customerService.getCustomerByIdentificationNumber(identificationNumber).isEmpty()&&customerService.getCustomerByBankAccountNumber(bankAccountNumber).isEmpty();
     }
 
     private Account createAccount(String username, String password) {

@@ -4,7 +4,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.studytest.savings_deposit.mappers.CustomerMapper;
 import org.studytest.savings_deposit.models.Customer;
-import org.studytest.savings_deposit.models.SavingsAccount;
 import org.studytest.savings_deposit.payload.CustomerDTO;
 import org.studytest.savings_deposit.repositories.CustomerRepository;
 import org.studytest.savings_deposit.services.CustomerService;
@@ -43,6 +42,12 @@ public class CustomerServiceImpl implements CustomerService {
     public Optional<Customer> getCustomerByIdentificationNumber(String identificationNumber) {
         return customerRepository.findCustomerByIdentificationNumber(identificationNumber);
     }
+
+    @Override
+    public Optional<Customer> getCustomerByBankAccountNumber(String bankAccountNumber) {
+        return customerRepository.findCustomerByBankAccountNumber(bankAccountNumber);
+    }
+
     @Override
     public String createCustomer(CustomerDTO customerDTO) {
         Customer newCustomer = customerMapper.convertToEntity(customerDTO);

@@ -50,6 +50,12 @@ public class SavingsAccount {
     @Column(name = "interest_payment_method")
     private String interestPaymentMethod;
 
+    @Column(name = "interestrate_value")
+    private Double interestRateValue;
+
+    @Column(name = "status")
+    private String status;
+
     @OneToOne
     @JoinColumn(name = "interestrate_id", referencedColumnName = "id")
     private InterestRate interestRate;

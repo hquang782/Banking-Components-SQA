@@ -43,7 +43,7 @@ public class Customer {
     @Column(name = "identification_number", unique = true)
     private String identificationNumber;
 
-    @Column(name = "bank_account_number")
+    @Column(name = "bank_account_number", unique = true)
     private String bankAccountNumber;
 
     @OneToOne(cascade = CascadeType.ALL)
