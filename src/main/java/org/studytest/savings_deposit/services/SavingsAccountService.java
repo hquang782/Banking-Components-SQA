@@ -9,7 +9,7 @@ import java.util.List;
 public interface SavingsAccountService {
     public SavingsAccount getSavingsAccountById(Long id);
 
-    public List<SavingsAccountDTO> getAllSavingsAccountsByCustomerId(Long customerId);
+    public List<SavingsAccount> getAllSavingsAccountsByCustomerId(Long customerId);
 
     public String createSavingsAccount(Long customerId ,SavingsAccountDTO savingsAccountDTO);
 

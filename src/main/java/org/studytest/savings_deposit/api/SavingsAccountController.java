@@ -30,9 +30,9 @@ public class SavingsAccountController {
         }
     }
     @GetMapping("/list/{customerId}")
-    public ResponseEntity<List<SavingsAccountDTO>> getAllSavingsAccounts(@PathVariable Long customerId) {
+    public ResponseEntity<List<SavingsAccount>> getAllSavingsAccounts(@PathVariable Long customerId) {
         // Gọi service để lấy tất cả các tài khoản tiết kiệm cho customerId
-        List<SavingsAccountDTO> savingsAccounts = savingsAccountService.getAllSavingsAccountsByCustomerId(customerId);
+        List<SavingsAccount> savingsAccounts = savingsAccountService.getAllSavingsAccountsByCustomerId(customerId);
 
         return ResponseEntity.ok(savingsAccounts);
     }

@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Danh sách Sổ tiết kiệm</title>
+    <link rel="stylesheet" href="/static/css/savingsList.css">
+    <style>
+        header {
+            background-color: #3598db;
+            padding: 20px;
+            text-align: center;
+            color: white;
+        }
+
+        footer {
+            background-color: #3598db;
+            padding: 10px;
+            text-align: center;
+            color: white;
+        }
+    </style>
+</head>
+<body>
+<header>
+    <h1>Ngân hàng Nhóm 11</h1>
+</header>
+<div class="container">
+    <h1>Danh sách Sổ tiết kiệm</h1>
+    <ul id="savingsList"></ul>
+</div>
+<footer>
+    <p>© 2024 - Ngân hàng Nhóm 11</p>
+</footer>
+
+<div id="modal" class="modal">
+    <div class="modal-content">
+        <span class="close">&times;</span>
+        <h2>Thông tin Sổ tiết kiệm</h2>
+        <div id="savingsInfo"></div>
+        <button id="closeModal">Đóng</button>
+        <button id="withdraw">Tất toán</button>
+    </div>
+</div>
+
+<script src="/static/js/savingsList.js"></script>
+</body>
+</html>

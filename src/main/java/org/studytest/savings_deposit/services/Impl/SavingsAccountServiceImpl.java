@@ -45,11 +45,8 @@ public class SavingsAccountServiceImpl implements SavingsAccountService {
         return savingsAccountOptional.orElse(null);
     }
     @Override
-    public List<SavingsAccountDTO> getAllSavingsAccountsByCustomerId(Long customerId) {
-        List<SavingsAccount> savingsAccountList = savingsAccountRepository.findSavingsAccountByCustomerId(customerId);
-        return savingsAccountList.stream()
-                .map(savingsAccountMapper::convertToDTO)
-                .collect(Collectors.toList());
+    public List<SavingsAccount> getAllSavingsAccountsByCustomerId(Long customerId) {
+        return savingsAccountRepository.findActiveSavingsAccountsByCustomerIdAndStatus(customerId, "active");
     }
 
     @Override
