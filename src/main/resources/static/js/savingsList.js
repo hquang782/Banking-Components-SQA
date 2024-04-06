@@ -1,3 +1,13 @@
+
+// Lấy thông tin người dùng từ localStorage
+var userInfo = JSON.parse(localStorage.getItem('userInfo'));
+
+// Kiểm tra xem userInfo có giá trị hay không
+if (!userInfo || Object.keys(userInfo).length === 0) {
+    // Nếu userInfo trống, chuyển hướng đến trang đăng nhập
+    window.location.href = "/login";
+}
+
 document.addEventListener("DOMContentLoaded", function() {
     const savingsList = document.getElementById("savingsList");
     const savingsInfo = document.getElementById("savingsInfo");
@@ -8,7 +18,8 @@ document.addEventListener("DOMContentLoaded", function() {
     let selectedSavingsAccountId; // Biến để lưu trữ ID của sổ tiết kiệm được chọn
     let savingsAccounts = []; // Mảng để lưu trữ danh sách sổ tiết kiệm
     // lấy customer id
-    let customerId = localStorage.getItem("customerId");
+    var userInfo = JSON.parse(localStorage.getItem('userInfo'));
+    let customerId = userInfo.identificationNumber
     // Function to render savings accounts list
     function renderSavingsList() {
         // Clear the existing list
@@ -91,3 +102,6 @@ document.addEventListener("DOMContentLoaded", function() {
         }
     });
 });
+function redirectToHome() {
+    window.location.href = "/home";
+}

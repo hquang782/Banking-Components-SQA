@@ -44,10 +44,17 @@ public class SavingsAccountServiceImpl implements SavingsAccountService {
         Optional<SavingsAccount> savingsAccountOptional = savingsAccountRepository.findById(id);
         return savingsAccountOptional.orElse(null);
     }
-    @Override
+
     public List<SavingsAccount> getAllSavingsAccountsByCustomerId(Long customerId) {
         return savingsAccountRepository.findActiveSavingsAccountsByCustomerIdAndStatus(customerId, "active");
     }
+
+    @Override
+    public List<SavingsAccount> getAllSavingsAccountsByCustomer(String identification_number){
+        Optional<Customer> customer = customerService.getCustomerByIdentificationNumber(identification_number);
+        return getAllSavingsAccountsByCustomerId(customer.get().getId());
+    }
+
 
     @Override
     public String createSavingsAccount(Long customerId, SavingsAccountDTO savingsAccountDTO) {

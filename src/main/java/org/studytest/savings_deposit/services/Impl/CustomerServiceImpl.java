@@ -10,6 +10,7 @@ import org.studytest.savings_deposit.services.CustomerService;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 @Service
@@ -46,6 +47,11 @@ public class CustomerServiceImpl implements CustomerService {
     @Override
     public Optional<Customer> getCustomerByBankAccountNumber(String bankAccountNumber) {
         return customerRepository.findCustomerByBankAccountNumber(bankAccountNumber);
+    }
+
+    @Override
+    public CustomerDTO getCustomerByAccountId(UUID account_id) {
+        return customerMapper.convertToDTO(customerRepository.findCustomerByAccount_Id(account_id));
     }
 
     @Override

@@ -5,6 +5,7 @@ import org.studytest.savings_deposit.payload.CustomerDTO;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
 public interface CustomerService {
     List<CustomerDTO> getAllCustomers();
@@ -14,4 +15,6 @@ public interface CustomerService {
     String deleteCustomer(Long id);
     Optional<Customer> getCustomerByIdentificationNumber(String identificationNumber);
     Optional<Customer> getCustomerByBankAccountNumber(String bankAccountNumber);
+
+    CustomerDTO getCustomerByAccountId(UUID account_id);
 }

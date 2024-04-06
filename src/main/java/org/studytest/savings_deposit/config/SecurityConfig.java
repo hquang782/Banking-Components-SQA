@@ -51,7 +51,8 @@ public class SecurityConfig {
                                 .requestMatchers("/static/**").permitAll()
                                 .requestMatchers("/api/v1/**").permitAll() // Cho phép tất cả các request tới "/api/v1/" không cần xác thực
                                 .requestMatchers("/api/auth/**").permitAll() // Cho phép tất cả các request tới "/api/auth/" không cần xác thực
-                                .requestMatchers("/savings-list").permitAll()
+                                .requestMatchers("/savings-list","/home",
+                                        "/login","/","/signin").permitAll()
 //                    .requestMatchers(HttpMethod.GET, "/menu/**").hasRole("ADMIN") // Cấu hình quyền truy cập dựa trên vai trò người dùng
                                 .anyRequest().authenticated()
                         // Các request khác cần phải được xác thực

@@ -3,6 +3,8 @@ package org.studytest.savings_deposit.api;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.studytest.savings_deposit.models.Customer;
+import org.studytest.savings_deposit.payload.CustomerDTO;
 import org.studytest.savings_deposit.payload.LoginDto;
 import org.studytest.savings_deposit.payload.RegisterDto;
 
@@ -18,9 +20,13 @@ public class AuthController {
     }
 
     @PostMapping(value = {"/login", "/signin"})
-    public ResponseEntity<String> login(@RequestBody LoginDto loginDto){
-        String response = authService.login(loginDto);
-        return ResponseEntity.ok(response);
+    public ResponseEntity<CustomerDTO> login(@RequestBody LoginDto loginDto){
+        CustomerDTO response = authService.login(loginDto);
+        if (response == null) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(null);
+        } else {
+            return ResponseEntity.ok(response);
+        }
     }
     @PostMapping(value = {"/register", "/signup"})
     public ResponseEntity<String> register(@RequestBody RegisterDto registerDto) {

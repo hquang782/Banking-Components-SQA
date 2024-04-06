@@ -3,6 +3,7 @@ package org.studytest.savings_deposit.services.Impl;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.studytest.savings_deposit.models.Account;
+import org.studytest.savings_deposit.models.Customer;
 import org.studytest.savings_deposit.models.ERole;
 import org.studytest.savings_deposit.models.Role;
 import org.studytest.savings_deposit.payload.CustomerDTO;
@@ -32,21 +33,26 @@ public class AuthServiceImpl implements AuthService {
         this.customerService = customerService;
     }
 
+
     @Override
-    public String login(LoginDto loginDto) {
-        if (isValidUser(loginDto.getUsername(), loginDto.getPassword())) {
-            return "Login successful";
-        } else {
-            return "Invalid username or password";
-        }
+    public CustomerDTO login(LoginDto loginDto) {
+        Optional<CustomerDTO> validUser = isValidUser(loginDto.getUsername(), loginDto.getPassword());
+        return validUser.orElse(null);
     }
-    private boolean isValidUser(String username, String password) {
+
+    private Optional<CustomerDTO> isValidUser(String username, String password) {
         // Lấy tài khoản từ username
         Optional<Account> optionalAccount = accountRepository.findByUsername(username);
         // Kiểm tra xem tài khoản có tồn tại và mật khẩu có khớp không
-        String encodedPassword = optionalAccount.get().getPassword();
-        return passwordEncoder.matches(password, encodedPassword);
+        if (optionalAccount.isPresent()) {
+            String encodedPassword = optionalAccount.get().getPassword();
+            if (passwordEncoder.matches(password, encodedPassword)) {
+                return Optional.of(customerService.getCustomerByAccountId(optionalAccount.get().getId()));
+            }
+        }
+        return Optional.empty();
     }
+
     @Override
     public String register(RegisterDto registerDto) {
         if (isUsernameAvailable(registerDto.getUsername(),registerDto.getIdentificationNumber(),registerDto.getBankAccountNumber())) {

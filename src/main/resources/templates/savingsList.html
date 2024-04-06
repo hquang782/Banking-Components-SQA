@@ -9,8 +9,9 @@
         header {
             background-color: #3598db;
             padding: 20px;
-            text-align: center;
+            text-align: left;
             color: white;
+            cursor: pointer;
         }
 
         footer {
@@ -22,7 +23,7 @@
     </style>
 </head>
 <body>
-<header>
+<header onclick="redirectToHome()"> <!-- Thêm sự kiện onclick vào đây -->
     <h1>Ngân hàng Nhóm 11</h1>
 </header>
 <div class="container">
@@ -44,5 +45,6 @@
 </div>
 
 <script src="/static/js/savingsList.js"></script>
+
 </body>
 </html>

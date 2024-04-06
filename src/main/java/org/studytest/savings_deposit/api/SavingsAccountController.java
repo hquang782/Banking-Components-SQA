@@ -29,11 +29,10 @@ public class SavingsAccountController {
             return ResponseEntity.notFound().build();
         }
     }
-    @GetMapping("/list/{customerId}")
-    public ResponseEntity<List<SavingsAccount>> getAllSavingsAccounts(@PathVariable Long customerId) {
+    @GetMapping("/list/{identification_number}")
+    public ResponseEntity<List<SavingsAccount>> getAllSavingsAccounts(@PathVariable String identification_number) {
         // Gọi service để lấy tất cả các tài khoản tiết kiệm cho customerId
-        List<SavingsAccount> savingsAccounts = savingsAccountService.getAllSavingsAccountsByCustomerId(customerId);
-
+        List<SavingsAccount> savingsAccounts = savingsAccountService.getAllSavingsAccountsByCustomer(identification_number);
         return ResponseEntity.ok(savingsAccounts);
     }
 
