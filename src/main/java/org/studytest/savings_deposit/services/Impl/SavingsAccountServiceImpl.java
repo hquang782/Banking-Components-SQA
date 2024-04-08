@@ -145,6 +145,24 @@ public class SavingsAccountServiceImpl implements SavingsAccountService {
             return "Savings account not found";
         }
     }
+// taoj tai khoan tiet kiem
+    @Override
+    public SavingsAccount creatSaveAccount(SavingsAccountDTO savingsAccountDTO) {
+        SavingsAccount sa = new SavingsAccount() ;
+//        sa.setAccountName(savingsAccountDTO.getAccountName());
+//        sa.setSavingsType(savingsAccountDTO.getSavingsType());
+//        sa.setDepositDate(savingsAccountDTO.getDepositDate());
+//        sa.setMaturityDate(savingsAccountDTO.getMaturityDate());
+//        sa.setTerm(savingsAccountDTO.getTerm());
+        sa.setDepositAmount(savingsAccountDTO.getDepositAmount()) ;
+//        sa.setInterestRateValue(Double.valueOf(savingsAccountDTO.getInterestRateId()));
+        sa.setStatus("Active");
+        sa.setInterestPaymentMethod(savingsAccountDTO.getInterestPaymentMethod());
+        return savingsAccountRepository.save(sa) ;
+
+
+    }
+
     public static long daysBetween(Date startDate, Date endDate) {
         long startTime = startDate.getTime();
         long endTime = endDate.getTime();

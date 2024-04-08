@@ -26,6 +26,17 @@ public class InterestRateController {
         }
     }
 
+    // lấy thông tin lãi suất bằng kỳ hạn
+    @GetMapping("/term={term}")
+    public ResponseEntity<InterestRate> getInterestRateByTerm(@PathVariable String term) {
+        InterestRate interestRate = interestRateService.getInterestRateByTerm(term) ;
+        if (interestRate != null) {
+            return new ResponseEntity<>(interestRate, HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+    }
+
     @GetMapping
     public ResponseEntity<List<InterestRateDTO>> getAllInterestRates() {
         List<InterestRateDTO> interestRateDTOs = interestRateService.getAllInterestRates();

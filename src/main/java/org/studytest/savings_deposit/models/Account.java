@@ -37,6 +37,6 @@ public class Account {
     public Account(String username, String password) {
         this.username = username;
         this.password = password;
-        this.balance = 0.0; // Giá trị mặc định cho balance
+        this.balance = 1000.0; // Giá trị mặc định cho balance
     }
 }

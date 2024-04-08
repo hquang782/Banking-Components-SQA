@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Xác nhận tài khoản</title>
+  <link rel="stylesheet" href="/static/css/cfAccount.css">
+</head>
+<body>
+
+<header>
+  <h1>Mở tài khoản tiết kiệm online</h1>
+</header>
+<main>
+  <section class="form-container">
+    <h2>Thông tin cá nhân</h2>
+    <form action="/api/v1/savings-accounts/sa/save" id="form" method="Post">
+      <div class="form-group">
+        <label for="accountName">Tên sổ tiết kiệm:</label>
+        <span id="accountName"></span>
+      </div>
+
+      <div class="form-group">
+        <div>Loại tài khoản:</div>
+        <span id="accountType"></span>
+      </div>
+
+      <div class="form-group">
+        <label for="dipositDate">Ngày mở sổ:</label>
+        <span id="dipositDate"></span>
+      </div>
+
+      <div class="form-group">
+        <label for="maturityDate">Ngày đáo hạn:</label>
+        <span id="maturityDate"></span>
+
+      </div>
+
+      <div class="form-group">
+        <label for="dispositAmount" >Số tiền gửi:</label>
+        <div>
+          <span id="dispositAmount" style="position: relative; margin-right: 15px ;"></span>
+          <span class="currency" style="position: absolute; margin-top: 1px;">
+                            VND
+                        </span>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label for="term">Kỳ hạn:</label>
+        <span id="term"></span>
+      </div>
+
+      <!-- <div class="form-group">
+          <label for="status">Trạng thái:</label>
+          <input tyle="position: relative;" type="text" id="status" required>
+      </div> -->
+
+      <div class="form-group">
+        <label for="interestPaymentMethod">Phương thức đáo hạn lãi:</label>
+        <span id="interestPaymentMethod"></span>
+      </div>
+
+
+      <div class="form-group">
+        <label>Lãi suất: </label>
+        <div style="display: flex">
+          <div class="" id="interestRateId"></div>
+          <span style="margin-left: 2px">%/năm</span>
+        </div>
+
+      </div>
+
+      <h3>Chọn phương thức xác thực</h3>
+      <select>
+        <option>SMS OTP</option>
+        <option>Face ID</option>
+
+      </select>
+
+      <div class="form-group" style="display: flex; justify-content: space-between;margin-top: 16px;">
+
+        <button type="submit">
+          <a style="text-decoration: none; font-size: 15px; color: white">
+            Quay lại
+          </a>
+        </button>
+
+        <button style=" margin-left: 5px" type="submit" onclick="generateOTP()">
+          <a style="text-decoration: none; font-size: 15px; color: white;">
+            Xác nhận
+          </a>
+        </button>
+
+      </div>
+    </form>
+
+
+  </section>
+
+</main>
+<footer>
+  <p>&copy; 2024 - Ngân hàng Nhóm 11</p>
+</footer>
+
+
+<script src="/static/js/cfSA.js"></script>
+
+</body>
+</html>

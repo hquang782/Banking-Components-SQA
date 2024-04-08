@@ -25,6 +25,21 @@ public class InterestRateServiceImpl implements InterestRateService {
         return interestRateOptional.orElse(null);
     }
 
+    // lấy thông tin lãi suất từ kỳ hạn
+    @Override
+    public InterestRate getInterestRateByTerm(String term) {
+
+        InterestRate interestRate =  interestRateRepository.findByTerm(term);
+        if (interestRate != null) {
+            // In ra thông tin của lãi suất
+            System.out.println("Thông tin lãi suất: " + interestRate.toString());
+        } else {
+            // In ra thông báo cho biết không tìm thấy lãi suất
+            System.out.println("Không tìm thấy lãi suất cho kỳ hạn: " + term);
+        }
+        return interestRate ;
+    }
+
     @Override
     public List<InterestRateDTO> getAllInterestRates() {
         List<InterestRate> interestRates = interestRateRepository.findAll();

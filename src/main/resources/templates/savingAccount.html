@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Mở tài khoản tiết kiệm Online</title>
+  <link rel="stylesheet" href="/static/css/savingAccount.css">
+</head>
+
+<body>
+<header>
+  <h1>Mở tài khoản tiết kiệm online</h1>
+</header>
+<main>
+  <section class="form-container">
+    <h2>Thông tin cá nhân</h2>
+    <span id="test">: TEst</span>
+    <form  id="saveAccountForm">
+      <div class="form-group">
+        <label for="accountName">Tên sổ tiết kiệm:</label>
+        <input tyle="position: relative;" type="text" id="accountName" required>
+      </div>
+
+      <div class="form-group">
+        <div>Loại tài khoản:</div>
+        <input tyle="position: relative;" type="text" id="accountType" value="Hình thức thông thường"
+               readonly>
+      </div>
+
+      <div class="form-group">
+        <label for="dipositDate">Ngày mở sổ:</label>
+        <input tyle="position: relative;" type="date" id="dipositDate" required>
+      </div>
+      <div class="form-group">
+        <label for="dispositAmount" s>Số tiền gửi:</label>
+        <input tyle="position: relative;" type="text" id="dispositAmount" oninput="formatCurrency(this)"
+               required>
+        <span class="currency" style="position: absolute; margin-top: -21px;margin-left: 475px;">
+                        VND
+                    </span>
+      </div>
+      <span id="error" style="color: red "  class="error"></span>
+
+      <div class="form-group" style=" margin-top: 10px">
+        <label for="term">Kỳ hạn:</label>
+        <select id="term" name="term" onchange="searchInterestRate()" required>
+          <option value="">Chọn kỳ hạn</option>
+          <option value="1 tháng">1 tháng</option>
+          <option value="3 tháng">3 tháng</option>
+          <option value="6 tháng">6 tháng</option>
+          <option value="1 năm">1 năm</option>
+          <option value="2 năm">2 năm</option>
+
+
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label>Lãi suất: </label>
+        <div style="display: flex">
+          <div class="" id="interestRateId"></div>
+          <span style="margin-left: 2px">/năm</span>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label for="interestPaymentMethod">Phương thức đáo hạn lãi:</label>
+        <select id="interestPaymentMethod" required>
+          <option value="">Chọn phương thức</option>
+          <option value="Lãi nhận về tài khoản">Lãi nhận về tài khoản</option>
+          <option value="Lãi nhập gốc">Lãi nhập gốc</option>
+
+        </select>
+      </div>
+
+
+      <button style=" margin-left: 5px" type="submit" >
+        <a style="text-decoration: none; font-size: 15px; color: white;" >
+          Xác nhận
+        </a>
+      </button>
+    </form>
+</section>
+</main>
+<footer>
+  <p>&copy; 2024 - Ngân hàng Nhóm 11</p>
+</footer>
+
+
+<script src="/static/js/savingAc.js"></script>
+</body>
+</html>

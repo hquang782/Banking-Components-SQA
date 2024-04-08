@@ -45,6 +45,7 @@ public class SavingsAccountController {
         return ResponseEntity.ok(message);
     }
 
+    // tao moi mọt
     @PutMapping("/{id}")
     public ResponseEntity<String> updateSavingsAccount(@PathVariable Long id) {
         // Gọi service để cập nhật thông tin của tài khoản tiết kiệm
@@ -66,4 +67,13 @@ public class SavingsAccountController {
             return ResponseEntity.notFound().build();
         }
     }
+
+    @PostMapping("/sa/save")
+    public String add(SavingsAccountDTO savingsAccountDTO){
+        savingsAccountService.creatSaveAccount(savingsAccountDTO)  ;
+        return"redirect:/nhapOTP" ;
+    }
+
+
+
 }

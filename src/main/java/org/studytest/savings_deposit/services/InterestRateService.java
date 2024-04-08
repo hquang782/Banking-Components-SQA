@@ -7,6 +7,7 @@ import java.util.List;
 
 public interface InterestRateService {
     InterestRate getInterestRateById(Long id);
+    InterestRate getInterestRateByTerm(String term) ;
     List<InterestRateDTO> getAllInterestRates();
     InterestRateDTO createInterestRate(InterestRateDTO interestRateDTO);
     InterestRateDTO updateInterestRate(Long id, InterestRateDTO updatedInterestRateDTO);
