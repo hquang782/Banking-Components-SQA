@@ -18,5 +18,5 @@ public interface SavingsAccountService {
 
     public String deleteSavingsAccount(Long id);
 
-//    public SavingsAccount creatSaveAccount(SavingsAccountDTO savingsAccountDTO) ;
+    public void updateAllSavingsAccounts();
 }

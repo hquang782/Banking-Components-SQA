@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.studytest.savings_deposit.mappers.CustomerMapper;
 import org.studytest.savings_deposit.mappers.SavingsAccountMapper;
+import org.studytest.savings_deposit.models.Account;
 import org.studytest.savings_deposit.models.Customer;
 
 import org.studytest.savings_deposit.models.InterestRate;
@@ -15,6 +16,7 @@ import org.studytest.savings_deposit.services.CustomerService;
 import org.studytest.savings_deposit.services.InterestRateService;
 import org.studytest.savings_deposit.services.SavingsAccountService;
 
+import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.ZoneId;
 import java.util.Date;
@@ -41,7 +43,7 @@ public class SavingsAccountServiceImpl implements SavingsAccountService {
 
 
     @Autowired
-    public SavingsAccountServiceImpl(SavingsAccountRepository savingsAccountRepository,CustomerService customerService,InterestRateService interestRateService) {
+    public SavingsAccountServiceImpl(SavingsAccountRepository savingsAccountRepository, CustomerService customerService, InterestRateService interestRateService) {
         this.savingsAccountRepository = savingsAccountRepository;
         this.interestRateService = interestRateService;
         this.customerService = customerService;
@@ -58,7 +60,7 @@ public class SavingsAccountServiceImpl implements SavingsAccountService {
     }
 
     @Override
-    public List<SavingsAccount> getAllSavingsAccountsByCustomer(String identification_number){
+    public List<SavingsAccount> getAllSavingsAccountsByCustomer(String identification_number) {
         Optional<Customer> customer = customerService.getCustomerByIdentificationNumber(identification_number);
         return getAllSavingsAccountsByCustomerId(customer.get().getId());
     }
@@ -84,8 +86,7 @@ public class SavingsAccountServiceImpl implements SavingsAccountService {
             savingsAccount.setMaturityDate(savingsAccountDTO.getMaturityDate());
             savingsAccount.setTerm(savingsAccountDTO.getTerm());
             savingsAccount.setDepositAmount(savingsAccountDTO.getDepositAmount());
-            // TODO lính lãi
-//            savingsAccount.setTotalAmount(savingsAccountDTO.getTotalAmount());
+            savingsAccount.setTotalAmount(savingsAccountDTO.getDepositAmount() + (savingsAccountDTO.getDepositAmount() * savingsAccountDTO.getInterestRateValue()));
             savingsAccount.setInterestRateValue(interestRate.getRate());
             savingsAccount.setStatus(savingsAccountDTO.getStatus());
             savingsAccount.setAccountNumber(accountNumber);
@@ -103,76 +104,138 @@ public class SavingsAccountServiceImpl implements SavingsAccountService {
 
     }
 
-    // TODO cập nhật lãi sau mỗi chu kì
+    // cập nhật lãi sau mỗi chu kì
     @Override
-    public String  updateSavingsAccount(Long id) {
+    public String updateSavingsAccount(Long id) {
         Optional<SavingsAccount> savingsAccountOptional = savingsAccountRepository.findById(id);
         if (savingsAccountOptional.isPresent()) {
-            // Cập nhật thông tin của tài khoản tiết kiệm đã tồn tại với thông tin từ updatedSavingsAccount
             SavingsAccount existingAccount = savingsAccountOptional.get();
-//            double tienGoc = existingAccount.get().getAccount().getBalance();
-            //double tienLai = tienGoc + lãi(% theo kì hạn)
-            // thành tiền = tienGoc + tienLai
-            //lấy lãi mới
-            InterestRate interestRate = interestRateService.getInterestRateById(existingAccount.getInterestRate().getId());
-            existingAccount.setInterestRateValue(interestRate.getRate());
+            LocalDate currentDate = LocalDate.now();
 
-            // Lưu đối tượng SavingsAccount đã cập nhật vào cơ sở dữ liệu
-            savingsAccountRepository.save(existingAccount);
-            return "Savings account updated successfully";
+            // So sánh ngày hiện tại với ngày đáo hạn
+            if (currentDate.isEqual(convertToLocalDate(existingAccount.getMaturityDate()))) {
+                // Cập nhật thông tin cho sổ tiết kiệm
+                existingAccount.setDepositDate(convertToDate(currentDate));
+
+                // Tính ngày đáo hạn mới
+                LocalDate newMaturityDate = currentDate.plusMonths(getTermInMonths(existingAccount.getTerm()));
+                existingAccount.setMaturityDate(convertToDate(newMaturityDate));
+
+                // Cập nhật depositAmount
+                existingAccount.setDepositAmount(existingAccount.getTotalAmount());
+
+                // Lấy lãi suất mới theo term
+                InterestRate interestRate = interestRateService.getInterestRateByTerm(existingAccount.getTerm());
+                if (interestRate != null) {
+                    // Cập nhật lãi suất mới và tính toán totalAmount mới
+                    existingAccount.setInterestRateValue(interestRate.getRate());
+                    double totalAmount = existingAccount.getDepositAmount() + (existingAccount.getDepositAmount() * existingAccount.getInterestRateValue());
+                    existingAccount.setTotalAmount(totalAmount);
+
+                    // Lưu đối tượng SavingsAccount đã cập nhật vào cơ sở dữ liệu
+                    savingsAccountRepository.save(existingAccount);
+                    return "Savings account updated successfully";
+                } else {
+                    return "Failed to update savings account: Interest rate not found for the term";
+                }
+            } else {
+                return "Savings account not matured yet";
+            }
         } else {
             return "Savings account not found";
         }
     }
+
+    // Hàm chuyển đổi term từ string sang số tháng
+    private int getTermInMonths(String term) {
+        int months;
+        String[] parts = term.split("\\s+");
+        int length = parts.length;
+        if (length == 2) {
+            int num = Integer.parseInt(parts[0]);
+            String unit = parts[1];
+            switch (unit) {
+                case "tháng":
+                    months = num;
+                    break;
+                case "năm":
+                    months = num * 12;
+                    break;
+                default:
+                    months = 0;
+            }
+        } else {
+            months = 0;
+        }
+        return months;
+    }
+
+    // Hàm chuyển đổi từ Date sang LocalDate
+    private LocalDate convertToLocalDate(Date dateToConvert) {
+        return dateToConvert.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+    }
+
+    // Hàm chuyển đổi từ LocalDate sang Date
+    private Date convertToDate(LocalDate localDateToConvert) {
+        return Date.from(localDateToConvert.atStartOfDay(ZoneId.systemDefault()).toInstant());
+    }
+
     // khi đã rút sổ thành công thì cập nhật status
     @Override
     public String deleteSavingsAccount(Long id) {
         Optional<SavingsAccount> savingsAccountOptional = savingsAccountRepository.findById(id);
         if (savingsAccountOptional.isPresent()) {
-            // Xóa tài khoản tiết kiệm từ cơ sở dữ liệu
-//            savingsAccountRepository.deleteById(id);
-            // lấy tgian hiện tại
+            SavingsAccount existingAccount = savingsAccountOptional.get();
+
+            // Lấy thời gian hiện tại
             LocalDate currentDate = LocalDate.now();
             // Chuyển đổi từ LocalDate sang Date
-            Date date = Date.from(currentDate.atStartOfDay(ZoneId.systemDefault()).toInstant());
+            Date maturityDate = Date.from(currentDate.atStartOfDay(ZoneId.systemDefault()).toInstant());
 
-            SavingsAccount existingAccount = savingsAccountOptional.get();
-            existingAccount.setMaturityDate(date);
+            // Cập nhật thông tin sổ tiết kiệm
+            existingAccount.setMaturityDate(maturityDate);
             existingAccount.setStatus("Matured");
-//            double tienGoc = existingAccount.getCustomer().getAccount().getBalance();
-            Date dayStart = existingAccount.getDepositDate();
-            Date dayEnd = existingAccount.getMaturityDate();
-            //TODO: sơn code công thức tính lãi vô đây nhá :)))
-//            double tienLai =  lãi(% theo không kì hạn || có kì hạn nếu rút đúng chu kì)
-            // thành tiền = tienGoc + tienLai
+
+            // Tính lãi
+            InterestRate interestRate = interestRateService.getInterestRateByTerm("Không kỳ hạn");
+            double interestRateValue = interestRate.getRate();
+            double depositAmount = existingAccount.getDepositAmount();
+            double interestAmount = depositAmount * interestRateValue;
+
+            // Cộng lãi vào số dư
+            existingAccount.setTotalAmount(depositAmount + interestAmount);
+            Customer customer = existingAccount.getCustomer();
+            Account account = customer.getAccount();
+            double balance = account.getBalance();
+            balance+= (depositAmount + interestAmount);
+            account.setBalance(balance);
+            customer.setAccount(account);
+            existingAccount.setCustomer(customer);
+
             // Lưu đối tượng SavingsAccount đã cập nhật vào cơ sở dữ liệu
             savingsAccountRepository.save(existingAccount);
 
-            return "Savings account Matured successfully";
+            return "Savings account matured successfully. Interest earned: " + interestAmount;
         } else {
             return "Savings account not found";
         }
     }
-// taoj tai khoan tiet kiem
-//    @Override
-//    public SavingsAccount creatSaveAccount(SavingsAccountDTO savingsAccountDTO) {
-//        SavingsAccount sa = new SavingsAccount() ;
-//        sa.setAccountName(savingsAccountDTO.getAccountName());
-//        sa.setSavingsType(savingsAccountDTO.getSavingsType());
-//        sa.setDepositDate(savingsAccountDTO.getDepositDate());
-//        sa.setMaturityDate(savingsAccountDTO.getMaturityDate());
-//        sa.setTerm(savingsAccountDTO.getTerm());
-//        sa.setDepositAmount(savingsAccountDTO.getDepositAmount()) ;
-//        sa.setInterestRateValue(Double.valueOf(savingsAccountDTO.getInterestRateId()));
-//        sa.setStatus("Active");
-//        sa.setInterestPaymentMethod(savingsAccountDTO.getInterestPaymentMethod());
-//        return savingsAccountRepository.save(sa) ;
-//    }
+
+    @Override
+    public void updateAllSavingsAccounts() {
+        // Lấy tất cả các sổ tiết kiệm trong hệ thống
+        List<SavingsAccount> allSavingsAccounts = savingsAccountRepository.findSavingsAccountByStatus("active");
+
+        // Duyệt qua từng sổ tiết kiệm để cập nhật
+        for (SavingsAccount savingsAccount : allSavingsAccounts) {
+           updateSavingsAccount(savingsAccount.getId());
+        }
+    }
 
     public static long daysBetween(Date startDate, Date endDate) {
         long startTime = startDate.getTime();
         long endTime = endDate.getTime();
         long diffTime = endTime - startTime;
-        return (diffTime / (1000 * 60 * 60 * 24))+1;
+        return (diffTime / (1000 * 60 * 60 * 24)) + 1;
     }
 }

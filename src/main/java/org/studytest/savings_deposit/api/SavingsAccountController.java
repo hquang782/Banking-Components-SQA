@@ -67,13 +67,4 @@ public class SavingsAccountController {
             return ResponseEntity.notFound().build();
         }
     }
-
-//    @PostMapping("/sa/save")
-//    public String add(SavingsAccountDTO savingsAccountDTO){
-//        savingsAccountService.creatSaveAccount(savingsAccountDTO)  ;
-//        return"redirect:/nhapOTP" ;
-//    }
-
-
-
 }

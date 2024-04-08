@@ -10,5 +10,6 @@ import java.util.Optional;
 public interface SavingsAccountRepository extends JpaRepository<SavingsAccount, Long> {
     List<SavingsAccount> findActiveSavingsAccountsByCustomerIdAndStatus(Long customerId, String status);
 
+    List<SavingsAccount> findSavingsAccountByStatus(String status);
     boolean existsByAccountNumber(String accountNumber);
 }

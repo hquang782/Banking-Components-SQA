@@ -50,8 +50,11 @@ document.addEventListener("DOMContentLoaded", function() {
     function showSavingsInfo(saving) {
         savingsInfo.innerHTML = `
             <p>Tên tài khoản: ${saving.accountName}</p>
-            <p>Số dư: ${saving.depositAmount}</p>
+            <p>Số tiền: ${saving.depositAmount}</p>
             <p>Lãi suất: ${saving.interestRateValue}</p>
+            <p>Ngày gửi: ${saving.depositDate}</p>
+            <p>Kỳ hạn: ${saving.term}</p>
+            <p>Ngày đáo hạn: ${saving.maturityDate}</p>
         `;
         console.log(selectedSavingsAccountId)
         modal.style.display = "block";
@@ -69,29 +72,32 @@ document.addEventListener("DOMContentLoaded", function() {
             return;
         }
 
-        // Gửi yêu cầu DELETE đến API
-        fetch(`/api/savings/${selectedSavingsAccountId}`, {
-            method: 'DELETE'
-        })
-            .then(response => {
-                if (!response.ok) {
-                    throw new Error('Failed to delete savings account');
-                }
-                // Xử lý khi xóa thành công
-                alert('Đã tất toán sổ tiết kiệm!');
-                modal.style.display = 'none';
-
-                // Remove the withdrawn savings account from the array
-                savingsAccounts = savingsAccounts.filter(account => account.id !== selectedSavingsAccountId);
-                // Re-render the savings accounts list
-                renderSavingsList();
+        // Nếu người dùng chấp nhận
+        if (window.confirm("Bạn có chắc chắn muốn tất toán sổ tiết kiệm này không?")) {
+            // Gửi yêu cầu DELETE đến API
+            fetch(`http://127.0.0.1:8080/api/v1/savings-accounts/${selectedSavingsAccountId}`, {
+                method: 'DELETE'
             })
-            .catch(error => {
-                console.error('Error deleting savings account:', error);
-                // Xử lý khi xảy ra lỗi
-                alert('Đã xảy ra lỗi khi tất toán sổ tiết kiệm');
-            });
-        modal.style.display = "none";
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Failed to maturity savings account');
+                    }
+                    // Xử lý khi xóa thành công
+                    alert('Đã tất toán sổ tiết kiệm!');
+                    modal.style.display = 'none';
+
+                    // Remove the withdrawn savings account from the array
+                    savingsAccounts = savingsAccounts.filter(account => account.id !== selectedSavingsAccountId);
+                    // Re-render the savings accounts list
+                    renderSavingsList();
+                })
+                .catch(error => {
+                    console.error('Error deleting savings account:', error);
+                    // Xử lý khi xảy ra lỗi
+                    alert('Đã xảy ra lỗi khi tất toán sổ tiết kiệm');
+                });
+            modal.style.display = "none";
+        }
     });
 
     // Close modal when clicking outside of it
