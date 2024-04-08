@@ -8,9 +8,9 @@ if (!userInfo || Object.keys(userInfo).length === 0) {
 } else {
     // Hiển thị thông tin người dùng trong trang
     document.getElementById('user-avatar').src = "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQV3XeKXPIxJP-R6Hg0d2x2DCxnKV_sT04umGCOTuiNIQ&s";
-    document.getElementById('welcome-message').innerText = 'Welcome, ' + userInfo.fullName;
-    document.getElementById('account-number').innerText = 'Account Number: ' + userInfo.bankAccountNumber;
-    document.getElementById('balance').innerText = 'Balance: $' + userInfo.account.balance;
+    document.getElementById('welcome-message').innerText = 'Chào, ' + userInfo.fullName;
+    document.getElementById('account-number').innerText = 'Số tài khoản: ' + userInfo.bankAccountNumber;
+    document.getElementById('balance').innerText = 'Số dư tài khoản: ' + userInfo.account.balance.toLocaleString('en-US') + 'VND';
 }
 
 function redirectToSavingsList() {

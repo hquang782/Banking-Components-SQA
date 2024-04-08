@@ -1,24 +1,4 @@
 
-// format số tiền nhập
-function formatCurrency(input) {
-    // Lấy giá trị đang nhập
-    var value = input.value;
-
-    // Xóa bỏ tất cả ký tự không phải số
-    value = value.replace(/[^0-9]/g, '');
-    // Chèn dấu phẩy sau mỗi 3 chữ số từ cuối chuỗi lên đầu
-    // var formattedValue = '';
-    // for (var i = value.length - 1, j = 1; i >= 0; i--, j++) {
-    //     formattedValue = value.charAt(i) + formattedValue;
-    //     if (j % 3 === 0 && i > 0) {
-    //         formattedValue = ',' + formattedValue;
-    //     }
-    // }
-    var numericValue = parseFloat(value);
-    // Gán giá trị đã định dạng vào trường nhập
-    input.value = numericValue;
-}
-
 // Lấy đối tượng input có id là "depositDate"
 var depositDateInput = document.getElementById("depositDate");
 
@@ -69,22 +49,65 @@ if (!userInfo || Object.keys(userInfo).length === 0) {
     window.location.href = "/login";
 } else {
     // Hiển thị thông tin người dùng trong trang
+    document.getElementById('stk').innerText = 'Số tài khoản: ' + userInfo.identificationNumber;
+    console.log(userInfo.identificationNumber) ;
+    // format tien
+    var balances = userInfo.account.balance ;
+    console.log(balances) ;
 
-    document.getElementById('test').innerText = 'Account Number: ' + userInfo.account.balance;
-    var result = userInfo.account.balance ;
-    console.log(result) ;
+
+    var balanceNew = balances.toLocaleString('en-US') ;
+
+    document.getElementById('blance').innerText = 'Số dư tài khoản: ' + balanceNew ;
+    // var result = userInfo.account.balance ;
+    // console.log(result) ;
     document.getElementById('depositAmount').addEventListener('input', function() {
-        var inputValue = parseFloat(this.value); // Chuyển đổi giá trị nhập vào thành số kiểu double
+
+        var inputValue = parseFloat(this.value.replace(/[^\d.]/g, '')); // Lọc chỉ giữ lại các kí tự số và dấu chấm
+        var formattedValue = inputValue.toLocaleString('en-US'); // Format số tiền với dấu phẩy
+
+        // Hiển thị số tiền đã format lên màn hình
+        this.value = formattedValue;
+
 
         // Kiểm tra nếu giá trị nhập vào thỏa mãn điều kiện
         if (inputValue <= parseFloat(result)) {
             document.getElementById('error').innerText = ''; // Xóa thông báo lỗi nếu có
             // Tiếp tục xử lý hoặc thực hiện các hành động khác ở đây
-        } else {
+        }
+        else if(isNaN(inputValue)){
+                this.value="" ;
+                document.getElementById('error').innerText = 'Vui lòng nhập giá trị số';
+        }
+            else {
+                this.value = "" ;
             // Nếu không thỏa mãn điều kiện, hiển thị thông báo lỗi màu đỏ
             document.getElementById('error').innerText = 'Vui Lòng Nhập Giá Trị Nhỏ Hơn Số Dư';
         }
     });
+}
+
+// format số tiền nhập
+function formatCurrency(input) {
+    // Lấy giá trị đang nhập
+    var value = input.value;
+
+    // Xóa bỏ tất cả ký tự không phải số
+    value = value.replace(/[^0-9]/g, '');
+    // Chèn dấu phẩy sau mỗi 3 chữ số từ cuối chuỗi lên đầu
+    var formattedValue = '';
+    for (var i = value.length - 1, j = 1; i >= 0; i--, j++) {
+        formattedValue = value.charAt(i) + formattedValue;
+        if (j % 3 === 0 && i > 0) {
+            formattedValue = ',' + formattedValue;
+        }
+    }
+    // var numericValue = parseFloat(value);
+    console.log(formattedValue) ;
+    // Gán giá trị đã định dạng vào trường nhập
+    // document.getElementById('depositAmount').innerText = formattedValue ;
+    input.value = formattedValue;
+
 }
 
 // lưu dữ liệu được nhập vào localStorage
@@ -161,4 +184,22 @@ function formatMaturityDate(maturityDate) {
     var formattedDate = year + "-" + month + "-" + day;
 
     return formattedDate;
+}
+
+
+
+// lấy thông tin đã nhập từ form đăng kí sổ tiết kiệm nếu click nút quay lại
+// Lấy thông tin người dùng từ localStorage
+var userInfo = JSON.parse(localStorage.getItem('userInfo'));
+
+// Kiểm tra xem userInfo có giá trị hay không
+if (!userInfo || Object.keys(userInfo).length === 0) {
+    // Nếu userInfo trống, chuyển hướng đến trang đăng nhập
+    window.location.href = "/login";
+} else {
+    // Hiển thị thông tin người dùng trong trang
+    document.getElementById('user-avatar').src = "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQV3XeKXPIxJP-R6Hg0d2x2DCxnKV_sT04umGCOTuiNIQ&s";
+    document.getElementById('welcome-message').innerText = 'Chào, ' + userInfo.fullName;
+    document.getElementById('account-number').innerText = 'Số tài khoản: ' + userInfo.bankAccountNumber;
+    document.getElementById('balance').innerText = 'Số dư tài khoản: ' + userInfo.account.balance.toLocaleString('vi-VN') + 'VND';
 }

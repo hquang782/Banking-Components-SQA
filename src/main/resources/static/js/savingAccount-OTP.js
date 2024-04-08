@@ -17,6 +17,25 @@ confirmButton.addEventListener('click', function(event) {
     verifyOTP();
 });
 
+// forcis trỏ chuột vào ô đầu tiên
+var m = document.querySelectorAll('input[type="text"]');
+m[0].focus();
+// Lấy tất cả các ô input
+const inputs = document.querySelectorAll('input[type="text"]');
+
+// Duyệt qua từng ô input
+inputs.forEach((input, index) => {
+    // Thêm sự kiện input cho mỗi ô input
+    input.addEventListener('input', function() {
+        // Nếu độ dài của giá trị trong ô input đạt tối đa
+        if (this.value.length === parseInt(this.getAttribute('maxlength'))) {
+            // Chuyển tới ô input tiếp theo
+            if (index < inputs.length - 1) {
+                inputs[index + 1].focus();
+            }
+        }
+    });
+});
 
 // Hàm tạo số OTP ngẫu nhiên có 6 chữ số
 function generateOTP() {
