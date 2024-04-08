@@ -59,8 +59,8 @@ if (!userInfo || Object.keys(userInfo).length === 0) {
     var balanceNew = balances.toLocaleString('en-US') ;
 
     document.getElementById('blance').innerText = 'Số dư tài khoản: ' + balanceNew ;
-    // var result = userInfo.account.balance ;
-    // console.log(result) ;
+    var result = userInfo.account.balance ;
+    console.log(result) ;
     document.getElementById('depositAmount').addEventListener('input', function() {
 
         var inputValue = parseFloat(this.value.replace(/[^\d.]/g, '')); // Lọc chỉ giữ lại các kí tự số và dấu chấm
