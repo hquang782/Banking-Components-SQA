@@ -80,47 +80,9 @@
   <input type="text" maxlength="1" id="digit4" required>
   <input type="text" maxlength="1" id="digit5" required>
   <input type="text" maxlength="1" id="digit6" required>
-  <button onclick="verifyOTP()">Xác Nhận</button>
+  <button id="confirmButton">Xác Nhận</button>
 </form>
-
-<script>
-  // Hàm tạo số OTP ngẫu nhiên có 6 chữ số
-  function generateOTP() {
-    var otp = '';
-    for (var i = 0; i < 6; i++) {
-      otp += Math.floor(Math.random() * 10); // Tạo số từ 0 đến 9
-    }
-    return otp;
-  }
-
-  // Hiển thị mã OTP lên trang
-  document.getElementById('otpDisplay').innerText = generateOTP();
-
-  // Hàm xác nhận OTP
-  function verifyOTP() {
-    // Lấy giá trị từ các ô nhập
-    var digit1 = document.getElementById('digit1').value;
-    var digit2 = document.getElementById('digit2').value;
-    var digit3 = document.getElementById('digit3').value;
-    var digit4 = document.getElementById('digit4').value;
-    var digit5 = document.getElementById('digit5').value;
-    var digit6 = document.getElementById('digit6').value;
-
-    // Ghép các giá trị lại thành một mã OTP
-    var otpEntered = digit1 + digit2 + digit3 + digit4 + digit5 + digit6;
-
-    // Lấy OTP từ localStorage
-    var otpStored = document.getElementById('otpDisplay').innerText;
-
-    // So sánh mã OTP nhập vào với mã OTP được tạo ra
-    if (otpEntered === otpStored) {
-      alert('Mở thành công!');
-    } else {
-      alert('Xác nhận không thành công. Vui lòng thử lại.');
-    }
-  }
-</script>
-<a href="XN.html">Quay lại</a>
+<script src="/static/js/savingAccount-OTP.js"></script>
 </body>
 
 </html>

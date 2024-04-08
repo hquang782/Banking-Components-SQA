@@ -19,44 +19,24 @@ function formatCurrency(input) {
     input.value = numericValue;
 }
 
+// Lấy đối tượng input có id là "depositDate"
+var depositDateInput = document.getElementById("depositDate");
+
+// Tạo một đối tượng Date đại diện cho ngày hiện tại
+var currentDate = new Date();
+
+// Lấy thông tin về năm, tháng và ngày từ đối tượng Date
+var year = currentDate.getFullYear();
+var month = ("0" + (currentDate.getMonth() + 1)).slice(-2); // Thêm "0" phía trước và chỉ lấy hai chữ số cuối cùng
+var day = ("0" + currentDate.getDate()).slice(-2); // Thêm "0" phía trước và chỉ lấy hai chữ số cuối cùng
+
+// Ghép năm, tháng và ngày thành chuỗi theo định dạng "YYYY-MM-DD"
+var formattedCurrentDate = year + "-" + month + "-" + day;
+
+// Gán giá trị của chuỗi định dạng vào trường input
+depositDateInput.value = formattedCurrentDate;
 
 
-// xử lý OTP
-// Hàm tạo số OTP ngẫu nhiên có 6 chữ số
-function generateOTP() {
-    var otp = '';
-    for (var i = 0; i < 6; i++) {
-        otp += Math.floor(Math.random() * 10); // Tạo số từ 0 đến 9
-    }
-    return otp;
-}
-
-// Hiển thị mã OTP lên trang
-// document.getElementById('otpDisplay').innerText = generateOTP();
-
-// Hàm xác nhận OTP
-function verifyOTP() {
-    // Lấy giá trị từ các ô nhập
-    var digit1 = document.getElementById('digit1').value;
-    var digit2 = document.getElementById('digit2').value;
-    var digit3 = document.getElementById('digit3').value;
-    var digit4 = document.getElementById('digit4').value;
-    var digit5 = document.getElementById('digit5').value;
-    var digit6 = document.getElementById('digit6').value;
-
-    // Ghép các giá trị lại thành một mã OTP
-    var otpEntered = digit1 + digit2 + digit3 + digit4 + digit5 + digit6;
-
-    // Lấy OTP từ localStorage
-    var otpStored = localStorage.getItem('otp');
-
-    // So sánh mã OTP nhập vào với mã OTP được tạo ra
-    if (otpEntered === otpStored) {
-        alert('Mở thành công!');
-    } else {
-        alert('Xác nhận không thành công. Vui lòng thử lại.');
-    }
-}
 
 
 // lấy thoog tin lãi suất tương ứng với kì hạn
@@ -69,9 +49,9 @@ function searchInterestRate() {
         .then(response => response.json())
         .then(data => {
             // Cập nhật nội dung của phần tử hiển thị lãi suất
-            var interestRateElement = document.getElementById("interestRateId");
+            var interestRateElement = document.getElementById("interestRateValue");
             interestRateElement.innerHTML = data.rate + "%";
-            document.getElementById("interestRateId").value = data.rate ;
+            document.getElementById("interestRateValue").value = data.rate ;
             console.log(interestRateElement.innerHTML) ;
 
         })
@@ -93,7 +73,7 @@ if (!userInfo || Object.keys(userInfo).length === 0) {
     document.getElementById('test').innerText = 'Account Number: ' + userInfo.account.balance;
     var result = userInfo.account.balance ;
     console.log(result) ;
-    document.getElementById('dispositAmount').addEventListener('input', function() {
+    document.getElementById('depositAmount').addEventListener('input', function() {
         var inputValue = parseFloat(this.value); // Chuyển đổi giá trị nhập vào thành số kiểu double
 
         // Kiểm tra nếu giá trị nhập vào thỏa mãn điều kiện
@@ -113,25 +93,27 @@ document.getElementById('saveAccountForm').addEventListener('submit', function(e
 
     // Lấy các giá trị từ các trường input
     var accountName = document.getElementById('accountName').value;
-    var accountType = document.getElementById('accountType').value;
-    var dipositDate = document.getElementById('dipositDate').value;
-    var dispositAmount = document.getElementById('dispositAmount').value;
+    var savingsType = document.getElementById('accountType').value;
+    var depositDate = document.getElementById('depositDate').value;
+    var depositAmount = document.getElementById('depositAmount').value;
     var term = document.getElementById('term').value;
-    var interestRateId = document.getElementById('interestRateId').value;
+    var interestRateValue = document.getElementById('interestRateValue').value;
     var interestPaymentMethod = document.getElementById('interestPaymentMethod').value;
 
 
     // Lưu dữ liệu vào localStorage
-    var accountInfo = {
+    var savingsAccountInfo = {
         accountName: accountName,
-        accountType: accountType,
-        dipositDate: dipositDate,
-        dispositAmount: dispositAmount,
+        savingsType: savingsType,
+        depositDate: depositDate,
+        maturityDate: formatMaturityDate(calculateMaturityDate(depositDate, term)),
+        depositAmount: depositAmount,
         term: term,
-        interestRateId: interestRateId,
+        status:"active",
+        interestRateValue: interestRateValue,
         interestPaymentMethod: interestPaymentMethod
     };
-    localStorage.setItem('accountInfo', JSON.stringify(accountInfo));
+    localStorage.setItem('savingsAccountInfo', JSON.stringify(savingsAccountInfo));
 
     // Hiển thị thông báo
     // alert('Dữ liệu đã được lưu vào localStorage!');
@@ -140,3 +122,43 @@ document.getElementById('saveAccountForm').addEventListener('submit', function(e
     // Có thể chuyển hướng trang sau khi lưu dữ liệu nếu cần
     // window.location.href = "new-page.html";
 });
+
+// ===============================function to calculate maturity date===========================
+function calculateMaturityDate(depositDate, term) {
+    // Chuyển đổi ngày gửi thành đối tượng Date
+    var startDate = new Date(depositDate);
+
+    // Sao chép ngày gửi để tránh thay đổi ngày gốc
+    var maturityDate = new Date(startDate);
+
+    // Tách số lượng và đơn vị từ term
+    var termValue = parseInt(term);
+    var termUnit = term.split(' ')[1]; // Lấy đơn vị (tháng, năm) từ term
+
+    // Dựa vào đơn vị, tính toán ngày đáo hạn
+    switch (termUnit) {
+        case 'tháng':
+            maturityDate.setMonth(maturityDate.getMonth() + termValue);
+            break;
+        case 'năm':
+            maturityDate.setFullYear(maturityDate.getFullYear() + termValue);
+            break;
+        default:
+            // Xử lý nếu đơn vị không hợp lệ
+            throw new Error('Đơn vị term không hợp lệ.');
+    }
+
+    return maturityDate;
+}
+
+function formatMaturityDate(maturityDate) {
+    // Lấy thông tin về năm, tháng và ngày từ ngày đáo hạn
+    var year = maturityDate.getFullYear();
+    var month = ("0" + (maturityDate.getMonth() + 1)).slice(-2); // Thêm "0" phía trước và chỉ lấy hai chữ số cuối cùng
+    var day = ("0" + maturityDate.getDate()).slice(-2); // Thêm "0" phía trước và chỉ lấy hai chữ số cuối cùng
+
+    // Ghép năm, tháng và ngày thành chuỗi theo định dạng "YYYY-MM-DD"
+    var formattedDate = year + "-" + month + "-" + day;
+
+    return formattedDate;
+}

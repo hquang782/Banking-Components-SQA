@@ -5,11 +5,13 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.studytest.savings_deposit.models.Customer;
+import org.studytest.savings_deposit.payload.AccountDTO;
 import org.studytest.savings_deposit.payload.CustomerDTO;
 import org.studytest.savings_deposit.services.CustomerService;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
 @RestController
 @RequestMapping("/api/v1/customers")
@@ -71,5 +73,12 @@ public class CustomerController {
         } else {
             return ResponseEntity.notFound().build();
         }
+    }
+
+    @PutMapping("/updateBalance/{accountId}")
+    public ResponseEntity<String> updateBalance(@PathVariable UUID accountId, @RequestBody AccountDTO accountDTO)  {
+        System.out.println(accountDTO);
+        String result = customerService.updateAccount(accountId, accountDTO);
+        return ResponseEntity.ok(result);
     }
 }

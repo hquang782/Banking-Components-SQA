@@ -10,5 +10,9 @@ public class AuthWebController {
     public String showLoginPage(){
         return "login";
     }
+    @GetMapping(value = {"/signup", "/register"})
+    public String showSignUpPage(){
+        return "register";
+    }
 
 }

@@ -28,6 +28,9 @@
 </header>
 <div class="container">
     <h1>Danh sách Sổ tiết kiệm</h1>
+    <!-- Thêm nút "Danh sách sổ tiết kiệm" -->
+    <button id="enterButton" onclick="redirectToEnter()">Mở sổ tiết kiệm</button>
+
     <ul id="savingsList"></ul>
 </div>
 <footer>
@@ -45,6 +48,11 @@
 </div>
 
 <script src="/static/js/savingsList.js"></script>
-
+<script>
+    // Hàm chuyển hướng đến trang "/enter"
+    function redirectToEnter() {
+        window.location.href = "/enter";
+    }
+</script>
 </body>
 </html>

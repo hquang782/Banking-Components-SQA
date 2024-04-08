@@ -1,6 +1,7 @@
 package org.studytest.savings_deposit.services;
 
 import org.studytest.savings_deposit.models.Customer;
+import org.studytest.savings_deposit.payload.AccountDTO;
 import org.studytest.savings_deposit.payload.CustomerDTO;
 
 import java.util.List;
@@ -15,6 +16,6 @@ public interface CustomerService {
     String deleteCustomer(Long id);
     Optional<Customer> getCustomerByIdentificationNumber(String identificationNumber);
     Optional<Customer> getCustomerByBankAccountNumber(String bankAccountNumber);
-
     CustomerDTO getCustomerByAccountId(UUID account_id);
+    String updateAccount(UUID account_id, AccountDTO accountDTO);
 }

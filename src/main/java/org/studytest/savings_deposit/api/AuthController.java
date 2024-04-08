@@ -10,6 +10,8 @@ import org.studytest.savings_deposit.payload.RegisterDto;
 
 import org.studytest.savings_deposit.services.AuthService;
 
+import java.util.UUID;
+
 @RestController
 @RequestMapping("/api/auth")
 public class AuthController {

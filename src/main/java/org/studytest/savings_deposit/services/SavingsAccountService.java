@@ -5,17 +5,18 @@ import org.studytest.savings_deposit.models.SavingsAccount;
 import org.studytest.savings_deposit.payload.SavingsAccountDTO;
 
 import java.util.List;
+import java.util.UUID;
 
 public interface SavingsAccountService {
     public SavingsAccount getSavingsAccountById(Long id);
 
     public List<SavingsAccount> getAllSavingsAccountsByCustomer(String identification_number);
 
-    public String createSavingsAccount(Long customerId ,SavingsAccountDTO savingsAccountDTO);
+    public String createSavingsAccount(String bankAccountNumber ,SavingsAccountDTO savingsAccountDTO);
 
     public String updateSavingsAccount(Long id);
 
     public String deleteSavingsAccount(Long id);
 
-    public SavingsAccount creatSaveAccount(SavingsAccountDTO savingsAccountDTO) ;
+//    public SavingsAccount creatSaveAccount(SavingsAccountDTO savingsAccountDTO) ;
 }

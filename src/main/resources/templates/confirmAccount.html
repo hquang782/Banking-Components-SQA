@@ -26,8 +26,8 @@
       </div>
 
       <div class="form-group">
-        <label for="dipositDate">Ngày mở sổ:</label>
-        <span id="dipositDate"></span>
+        <label for="depositDate">Ngày mở sổ:</label>
+        <span id="depositDate"></span>
       </div>
 
       <div class="form-group">
@@ -37,9 +37,9 @@
       </div>
 
       <div class="form-group">
-        <label for="dispositAmount" >Số tiền gửi:</label>
+        <label for="depositAmount" >Số tiền gửi:</label>
         <div>
-          <span id="dispositAmount" style="position: relative; margin-right: 15px ;"></span>
+          <span id="depositAmount" style="position: relative; margin-right: 15px ;"></span>
           <span class="currency" style="position: absolute; margin-top: 1px;">
                             VND
                         </span>
@@ -65,28 +65,29 @@
       <div class="form-group">
         <label>Lãi suất: </label>
         <div style="display: flex">
-          <div class="" id="interestRateId"></div>
+          <div class="" id="interestRateValue"></div>
           <span style="margin-left: 2px">%/năm</span>
         </div>
 
       </div>
 
       <h3>Chọn phương thức xác thực</h3>
-      <select>
-        <option>SMS OTP</option>
-        <option>Face ID</option>
-
-      </select>
+      <label>
+        <select>
+          <option>SMS OTP</option>
+<!--          <option>Face ID</option>-->
+        </select>
+      </label>
 
       <div class="form-group" style="display: flex; justify-content: space-between;margin-top: 16px;">
 
-        <button type="submit">
+        <button type="button" id="backButton">
           <a style="text-decoration: none; font-size: 15px; color: white">
             Quay lại
           </a>
         </button>
 
-        <button style=" margin-left: 5px" type="submit" onclick="generateOTP()">
+        <button style="margin-left: 5px" type="button" onclick="navigateToOTPPage()">
           <a style="text-decoration: none; font-size: 15px; color: white;">
             Xác nhận
           </a>

@@ -56,7 +56,7 @@ public class SavingsAccount {
     @Column(name = "status")
     private String status;
 
-    @OneToOne
+    @ManyToOne
     @JoinColumn(name = "interestrate_id", referencedColumnName = "id")
     private InterestRate interestRate;
 

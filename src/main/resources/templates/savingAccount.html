@@ -14,30 +14,26 @@
 <main>
   <section class="form-container">
     <h2>Thông tin cá nhân</h2>
-    <span id="test">: TEst</span>
+    <span id="test"> TEst</span>
     <form  id="saveAccountForm">
       <div class="form-group">
         <label for="accountName">Tên sổ tiết kiệm:</label>
-        <input tyle="position: relative;" type="text" id="accountName" required>
+        <input style="position: relative;" type="text" id="accountName" required>
       </div>
 
       <div class="form-group">
-        <div>Loại tài khoản:</div>
-        <input tyle="position: relative;" type="text" id="accountType" value="Hình thức thông thường"
-               readonly>
+        <label for="accountType">Loại tài khoản:</label><input style="position: relative;" type="text" id="accountType" value="Hình thức thông thường" readonly>
       </div>
 
       <div class="form-group">
-        <label for="dipositDate">Ngày mở sổ:</label>
-        <input tyle="position: relative;" type="date" id="dipositDate" required>
+        <label for="depositDate">Ngày mở sổ:</label>
+        <input style="position: relative;" type="date" id="depositDate" readonly placeholder="theo định dạng 'YYYY-MM-DD'">
       </div>
       <div class="form-group">
-        <label for="dispositAmount" s>Số tiền gửi:</label>
-        <input tyle="position: relative;" type="text" id="dispositAmount" oninput="formatCurrency(this)"
+        <label for="depositAmount" >Số tiền gửi:</label>
+        <input style="position: relative;" type="text" id="depositAmount" oninput="formatCurrency(this)"
                required>
-        <span class="currency" style="position: absolute; margin-top: -21px;margin-left: 475px;">
-                        VND
-                    </span>
+        <span class="currency" style="position: absolute; margin-top: -21px;margin-left: 475px;">VND</span>
       </div>
       <span id="error" style="color: red "  class="error"></span>
 
@@ -50,15 +46,13 @@
           <option value="6 tháng">6 tháng</option>
           <option value="1 năm">1 năm</option>
           <option value="2 năm">2 năm</option>
-
-
         </select>
       </div>
 
       <div class="form-group">
         <label>Lãi suất: </label>
         <div style="display: flex">
-          <div class="" id="interestRateId"></div>
+          <div class="" id="interestRateValue"></div>
           <span style="margin-left: 2px">/năm</span>
         </div>
       </div>
@@ -69,7 +63,6 @@
           <option value="">Chọn phương thức</option>
           <option value="Lãi nhận về tài khoản">Lãi nhận về tài khoản</option>
           <option value="Lãi nhập gốc">Lãi nhập gốc</option>
-
         </select>
       </div>
 

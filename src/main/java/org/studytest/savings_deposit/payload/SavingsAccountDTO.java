@@ -21,6 +21,6 @@ public class SavingsAccountDTO {
     private Double depositAmount;
     private String status;
     private String interestPaymentMethod;
-    private Long interestRateId;
+    private Double interestRateValue;
 }
 

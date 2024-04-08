@@ -2,9 +2,13 @@ package org.studytest.savings_deposit.services.Impl;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.studytest.savings_deposit.mappers.AccountMapper;
 import org.studytest.savings_deposit.mappers.CustomerMapper;
+import org.studytest.savings_deposit.models.Account;
 import org.studytest.savings_deposit.models.Customer;
+import org.studytest.savings_deposit.payload.AccountDTO;
 import org.studytest.savings_deposit.payload.CustomerDTO;
+import org.studytest.savings_deposit.repositories.AccountRepository;
 import org.studytest.savings_deposit.repositories.CustomerRepository;
 import org.studytest.savings_deposit.services.CustomerService;
 
@@ -19,11 +23,15 @@ public class CustomerServiceImpl implements CustomerService {
     private final CustomerRepository customerRepository;
     private final CustomerMapper customerMapper;
 
-    @Autowired
-    public CustomerServiceImpl( CustomerRepository customerRepository,CustomerMapper customerMapper) {
+    private final AccountMapper accountMapper;
+    private final AccountRepository accountRepository;
 
+    @Autowired
+    public CustomerServiceImpl( CustomerRepository customerRepository,CustomerMapper customerMapper, AccountMapper accountMapper,AccountRepository accountRepository) {
+        this.accountRepository = accountRepository;
         this.customerRepository = customerRepository;
         this.customerMapper = customerMapper;
+        this.accountMapper = accountMapper;
     }
 
     @Override
@@ -75,5 +83,21 @@ public class CustomerServiceImpl implements CustomerService {
         customerRepository.deleteById(id);
 
         return "Customer with id " + id + " deleted successfully.";
+    }
+
+    public String  updateAccount(UUID accountId, AccountDTO accountDTO) {
+        Optional<Account> optionalAccount = accountRepository.findById(accountId);
+        if (optionalAccount.isPresent()) {
+            Account account = optionalAccount.get();
+            // Cập nhật thông tin tài khoản từ DTO
+//            account.setUsername(accountDTO.getUsername());
+//            account.setPassword(accountDTO.getPassword());
+            account.setBalance(accountDTO.getBalance());
+            // Lưu lại thông tin tài khoản đã cập nhật vào repository
+            accountRepository.save(account);
+            return "Cập nhật tài khoản thành công!";
+        } else {
+            return "Không tìm thấy tài khoản để cập nhật!";
+        }
     }
 }

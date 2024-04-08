@@ -50,3 +50,8 @@ button {
 button:hover {
     background-color: #0056b3;
 }
+a {
+    display: block;
+    margin-top: 20px; /* Đặt khoảng cách giữa liên kết và nút "Login" là 30px */
+    text-decoration: none;
+}

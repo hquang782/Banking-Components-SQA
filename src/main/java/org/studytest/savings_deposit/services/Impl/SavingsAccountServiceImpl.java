@@ -2,11 +2,14 @@ package org.studytest.savings_deposit.services.Impl;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.studytest.savings_deposit.mappers.CustomerMapper;
 import org.studytest.savings_deposit.mappers.SavingsAccountMapper;
 import org.studytest.savings_deposit.models.Customer;
+
 import org.studytest.savings_deposit.models.InterestRate;
 import org.studytest.savings_deposit.models.SavingsAccount;
 import org.studytest.savings_deposit.payload.SavingsAccountDTO;
+
 import org.studytest.savings_deposit.repositories.SavingsAccountRepository;
 import org.studytest.savings_deposit.services.CustomerService;
 import org.studytest.savings_deposit.services.InterestRateService;
@@ -18,7 +21,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
-import java.util.stream.Collectors;
+
 
 @Service
 public class SavingsAccountServiceImpl implements SavingsAccountService {
@@ -32,6 +35,11 @@ public class SavingsAccountServiceImpl implements SavingsAccountService {
 
     @Autowired
     private CustomerService customerService;
+
+    @Autowired
+    private CustomerMapper customerMapper;
+
+
     @Autowired
     public SavingsAccountServiceImpl(SavingsAccountRepository savingsAccountRepository,CustomerService customerService,InterestRateService interestRateService) {
         this.savingsAccountRepository = savingsAccountRepository;
@@ -57,10 +65,10 @@ public class SavingsAccountServiceImpl implements SavingsAccountService {
 
 
     @Override
-    public String createSavingsAccount(Long customerId, SavingsAccountDTO savingsAccountDTO) {
+    public String createSavingsAccount(String bankAccountNumber, SavingsAccountDTO savingsAccountDTO) {
 
-        InterestRate interestRate = interestRateService.getInterestRateById(savingsAccountDTO.getInterestRateId());
-        Optional<Customer> customer = customerService.getCustomerById(customerId);
+        InterestRate interestRate = interestRateService.getInterestRateByTerm(savingsAccountDTO.getTerm());
+        Optional<Customer> customer = customerService.getCustomerByBankAccountNumber(bankAccountNumber);
         if (interestRate != null) {
             // Sinh ra một số tài khoản mới và duy nhất
             String accountNumber = UUID.randomUUID().toString();
@@ -102,7 +110,7 @@ public class SavingsAccountServiceImpl implements SavingsAccountService {
         if (savingsAccountOptional.isPresent()) {
             // Cập nhật thông tin của tài khoản tiết kiệm đã tồn tại với thông tin từ updatedSavingsAccount
             SavingsAccount existingAccount = savingsAccountOptional.get();
-            double tienGoc = existingAccount.getCustomer().getAccount().getBalance();
+//            double tienGoc = existingAccount.get().getAccount().getBalance();
             //double tienLai = tienGoc + lãi(% theo kì hạn)
             // thành tiền = tienGoc + tienLai
             //lấy lãi mới
@@ -131,7 +139,7 @@ public class SavingsAccountServiceImpl implements SavingsAccountService {
             SavingsAccount existingAccount = savingsAccountOptional.get();
             existingAccount.setMaturityDate(date);
             existingAccount.setStatus("Matured");
-            double tienGoc = existingAccount.getCustomer().getAccount().getBalance();
+//            double tienGoc = existingAccount.getCustomer().getAccount().getBalance();
             Date dayStart = existingAccount.getDepositDate();
             Date dayEnd = existingAccount.getMaturityDate();
             //TODO: sơn code công thức tính lãi vô đây nhá :)))
@@ -146,22 +154,20 @@ public class SavingsAccountServiceImpl implements SavingsAccountService {
         }
     }
 // taoj tai khoan tiet kiem
-    @Override
-    public SavingsAccount creatSaveAccount(SavingsAccountDTO savingsAccountDTO) {
-        SavingsAccount sa = new SavingsAccount() ;
+//    @Override
+//    public SavingsAccount creatSaveAccount(SavingsAccountDTO savingsAccountDTO) {
+//        SavingsAccount sa = new SavingsAccount() ;
 //        sa.setAccountName(savingsAccountDTO.getAccountName());
 //        sa.setSavingsType(savingsAccountDTO.getSavingsType());
 //        sa.setDepositDate(savingsAccountDTO.getDepositDate());
 //        sa.setMaturityDate(savingsAccountDTO.getMaturityDate());
 //        sa.setTerm(savingsAccountDTO.getTerm());
-        sa.setDepositAmount(savingsAccountDTO.getDepositAmount()) ;
+//        sa.setDepositAmount(savingsAccountDTO.getDepositAmount()) ;
 //        sa.setInterestRateValue(Double.valueOf(savingsAccountDTO.getInterestRateId()));
-        sa.setStatus("Active");
-        sa.setInterestPaymentMethod(savingsAccountDTO.getInterestPaymentMethod());
-        return savingsAccountRepository.save(sa) ;
-
-
-    }
+//        sa.setStatus("Active");
+//        sa.setInterestPaymentMethod(savingsAccountDTO.getInterestPaymentMethod());
+//        return savingsAccountRepository.save(sa) ;
+//    }
 
     public static long daysBetween(Date startDate, Date endDate) {
         long startTime = startDate.getTime();

@@ -8,6 +8,7 @@ import org.studytest.savings_deposit.payload.SavingsAccountDTO;
 import org.studytest.savings_deposit.services.SavingsAccountService;
 
 import java.util.List;
+import java.util.UUID;
 
 @RestController
 @RequestMapping("/api/v1/savings-accounts")
@@ -22,7 +23,6 @@ public class SavingsAccountController {
     public ResponseEntity<SavingsAccount> getSavingsAccountById(@PathVariable Long id) {
         // Gọi service để lấy tài khoản tiết kiệm từ id
         SavingsAccount savingsAccount = savingsAccountService.getSavingsAccountById(id);
-
         if (savingsAccount != null) {
             return ResponseEntity.ok(savingsAccount);
         } else {
@@ -36,11 +36,11 @@ public class SavingsAccountController {
         return ResponseEntity.ok(savingsAccounts);
     }
 
-    @PostMapping("/{customerId}")
-    public ResponseEntity<String> createSavingsAccount(@PathVariable Long customerId,@RequestBody SavingsAccountDTO savingsAccountDTO) {
+    @PostMapping("/{bankAccountNumber}")
+    public ResponseEntity<String> createSavingsAccount(@PathVariable String bankAccountNumber,@RequestBody SavingsAccountDTO savingsAccountDTO) {
 
         // Gọi service để thêm tài khoản tiết kiệm mới
-        String message = savingsAccountService.createSavingsAccount(customerId,savingsAccountDTO);
+        String message = savingsAccountService.createSavingsAccount(bankAccountNumber ,savingsAccountDTO);
 
         return ResponseEntity.ok(message);
     }
@@ -68,11 +68,11 @@ public class SavingsAccountController {
         }
     }
 
-    @PostMapping("/sa/save")
-    public String add(SavingsAccountDTO savingsAccountDTO){
-        savingsAccountService.creatSaveAccount(savingsAccountDTO)  ;
-        return"redirect:/nhapOTP" ;
-    }
+//    @PostMapping("/sa/save")
+//    public String add(SavingsAccountDTO savingsAccountDTO){
+//        savingsAccountService.creatSaveAccount(savingsAccountDTO)  ;
+//        return"redirect:/nhapOTP" ;
+//    }
 
 
 
