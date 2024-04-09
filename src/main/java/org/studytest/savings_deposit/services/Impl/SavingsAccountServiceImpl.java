@@ -87,7 +87,8 @@ public class SavingsAccountServiceImpl implements SavingsAccountService {
             savingsAccount.setMaturityDate(savingsAccountDTO.getMaturityDate());
             savingsAccount.setTerm(savingsAccountDTO.getTerm());
             savingsAccount.setDepositAmount(savingsAccountDTO.getDepositAmount());
-            savingsAccount.setTotalAmount(savingsAccountDTO.getDepositAmount() + (savingsAccountDTO.getDepositAmount() * savingsAccountDTO.getInterestRateValue()));
+            long numOfDay = daysBetween(savingsAccountDTO.getDepositDate(),savingsAccountDTO.getMaturityDate());
+            savingsAccount.setTotalAmount(savingsAccountDTO.getDepositAmount() + (savingsAccountDTO.getDepositAmount() * (savingsAccountDTO.getInterestRateValue()/100)*(numOfDay/365)));
             savingsAccount.setInterestRateValue(interestRate.getRate());
             savingsAccount.setStatus(savingsAccountDTO.getStatus());
             savingsAccount.setAccountNumber(accountNumber);
@@ -112,6 +113,7 @@ public class SavingsAccountServiceImpl implements SavingsAccountService {
         if (savingsAccountOptional.isPresent()) {
             SavingsAccount existingAccount = savingsAccountOptional.get();
             LocalDate currentDate = LocalDate.now();
+            long numOfDay = daysBetween(existingAccount.getDepositDate(),existingAccount.getMaturityDate());
 
             // So sánh ngày hiện tại với ngày đáo hạn
             if (currentDate.isEqual(convertToLocalDate(existingAccount.getMaturityDate()))) {
@@ -136,13 +138,13 @@ public class SavingsAccountServiceImpl implements SavingsAccountService {
                     existingAccount.setCustomer(customer);
                 }
 
-
                 // Lấy lãi suất mới theo term
                 InterestRate interestRate = interestRateService.getInterestRateByTerm(existingAccount.getTerm());
                 if (interestRate != null) {
                     // Cập nhật lãi suất mới và tính toán totalAmount mới
                     existingAccount.setInterestRateValue(interestRate.getRate());
-                    double totalAmount = existingAccount.getDepositAmount() + (existingAccount.getDepositAmount() * existingAccount.getInterestRateValue());
+                    double totalAmount = existingAccount.getDepositAmount() +
+                            (existingAccount.getDepositAmount() * (existingAccount.getInterestRateValue()/100)*((double) numOfDay /365));
                     existingAccount.setTotalAmount(totalAmount);
 
                     // Lưu đối tượng SavingsAccount đã cập nhật vào cơ sở dữ liệu
@@ -205,15 +207,22 @@ public class SavingsAccountServiceImpl implements SavingsAccountService {
             // Chuyển đổi từ LocalDate sang Date
             Date maturityDate = Date.from(currentDate.atStartOfDay(ZoneId.systemDefault()).toInstant());
 
+
+
             // Cập nhật thông tin sổ tiết kiệm
             existingAccount.setMaturityDate(maturityDate);
             existingAccount.setStatus("Matured");
 
             // Tính lãi
+            long numOfDay = daysBetween(existingAccount.getDepositDate(),maturityDate);
             InterestRate interestRate = interestRateService.getInterestRateByTerm("Không kỳ hạn");
             double interestRateValue = interestRate.getRate();
+//            nếu gửi và rút cùng ngày thì không có lãi
+            if(numOfDay<=1){
+                interestRateValue =0;
+            }
             double depositAmount = existingAccount.getDepositAmount();
-            double interestAmount = depositAmount * interestRateValue;
+            double interestAmount = depositAmount * (interestRateValue/100) *((double) numOfDay /365);
 
             // Cộng lãi vào số dư
             existingAccount.setTotalAmount(depositAmount + interestAmount);
