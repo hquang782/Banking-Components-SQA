@@ -66,6 +66,10 @@ document.addEventListener("DOMContentLoaded", function () {
         modal.style.display = "none";
     });
 
+    const closeButton1 = document.querySelector("#modal .close");
+    closeButton1.addEventListener("click", () => {
+        modal.style.display = "none";
+    });
     // Withdraw button action
     withdrawButton.addEventListener("click", () => {
         if (!selectedSavingsAccountId) {
@@ -73,53 +77,69 @@ document.addEventListener("DOMContentLoaded", function () {
             return;
         }
 
-        // Hiển thị hộp thoại nhập mật khẩu
-        const password = prompt("Vui lòng nhập mật khẩu để tất toán sổ tiết kiệm:");
+        // Hiển thị dialog nhập mật khẩu
+        const passwordDialog = document.getElementById("passwordDialog");
+        passwordDialog.style.display = "block";
 
-        // Kiểm tra xem mật khẩu đã nhập có hợp lệ không
-        if (password === null || password === '') {
-            // Người dùng đã hủy hoặc không nhập mật khẩu
-            return;
-        }
+        // Đóng dialog khi nhấn nút đóng
+        const closeButton = document.querySelector("#passwordDialog .close");
+        closeButton.addEventListener("click", () => {
+            passwordDialog.style.display = "none";
+        });
 
-        // Gửi mật khẩu đến server để kiểm tra
-        fetch(`http://127.0.0.1:8080/api/auth/verifyPassword`, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({
-                username: userInfo.account.username,
-                password: password }) // Gửi mật khẩu đến server
-        })
-            .then(response => {
-                if (!response.ok) {
-                    throw new Error('Failed to verify password');
-                }
-                // Xác thực mật khẩu thành công, tiếp tục tất toán sổ tiết kiệm
-                return fetch(`http://127.0.0.1:8080/api/v1/savings-accounts/${selectedSavingsAccountId}`, {
-                    method: 'DELETE'
+        // Xác nhận mật khẩu khi nhấn nút xác nhận
+        const confirmButton = document.getElementById("confirmButton");
+        confirmButton.addEventListener("click", () => {
+            const password = document.getElementById("passwordInput").value;
+
+            // Kiểm tra xem mật khẩu đã nhập có hợp lệ không
+            if (password === '') {
+                alert("Vui lòng nhập mật khẩu.");
+                return;
+            }
+
+
+            // Gửi mật khẩu đến server để kiểm tra
+            fetch(`http://127.0.0.1:8080/api/auth/verifyPassword`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    username: userInfo.account.username,
+                    password: password }) // Gửi mật khẩu đến server
+            })
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Failed to verify password');
+                    }
+                    // Xác thực mật khẩu thành công, tiếp tục tất toán sổ tiết kiệm
+                    return fetch(`http://127.0.0.1:8080/api/v1/savings-accounts/${selectedSavingsAccountId}`, {
+                        method: 'DELETE'
+                    });
+                })
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Failed to maturity savings account');
+                    }
+                    // Xử lý khi xóa thành công
+                    alert('Đã tất toán sổ tiết kiệm!');
+                    modal.style.display = 'none';
+                    fetchAndUpdateUserInfo(userInfo); // Gọi hàm để lấy thông tin mới của khách hàng
+                    // Remove the withdrawn savings account from the array
+                    savingsAccounts = savingsAccounts.filter(account => account.id !== selectedSavingsAccountId);
+                    // Re-render the savings accounts list
+                    renderSavingsList();
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    // Xử lý khi xảy ra lỗi
+                    alert('Đã xảy ra lỗi khi tất toán sổ tiết kiệm hoặc xác thực mật khẩu');
                 });
-            })
-            .then(response => {
-                if (!response.ok) {
-                    throw new Error('Failed to maturity savings account');
-                }
-                // Xử lý khi xóa thành công
-                alert('Đã tất toán sổ tiết kiệm!');
-                modal.style.display = 'none';
-                fetchAndUpdateUserInfo(userInfo); // Gọi hàm để lấy thông tin mới của khách hàng
-                // Remove the withdrawn savings account from the array
-                savingsAccounts = savingsAccounts.filter(account => account.id !== selectedSavingsAccountId);
-                // Re-render the savings accounts list
-                renderSavingsList();
-            })
-            .catch(error => {
-                console.error('Error:', error);
-                // Xử lý khi xảy ra lỗi
-                alert('Đã xảy ra lỗi khi tất toán sổ tiết kiệm hoặc xác thực mật khẩu');
-            });
-        modal.style.display = "none";
+            password.value = "";
+            passwordDialog.style.display= "none";
+            modal.style.display = "none";
+        });
     });
 
 

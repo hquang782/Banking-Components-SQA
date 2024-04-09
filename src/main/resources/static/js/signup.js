@@ -42,7 +42,7 @@ document.getElementById("registrationForm").addEventListener("submit", function(
 });
 
 document.addEventListener("DOMContentLoaded", function() {
-
+    document.getElementById("fullName").focus();
     // ===========================================Function to validate full name===========================================
     // Function to show error message
     function showError(fieldId, errorMessage) {
@@ -152,10 +152,9 @@ document.addEventListener("DOMContentLoaded", function() {
 
     function validateIdentificationNumber(identificationNumber) {
         // Kiểm tra xem dữ liệu nhập vào có phải là toàn số không
-        if (!/^\d+$/.test(identificationNumber)) {
-            return false;
-        }
-        return true;
+        identificationNumber = identificationNumber.toString(); // Chuyển số thành chuỗi
+        // Kiểm tra xem dữ liệu nhập vào có phải là toàn số không và có độ dài là 12 hoặc 10
+        return /^\d+$/.test(identificationNumber) && (identificationNumber.length === 12 || identificationNumber.length === 10);
     }
 
 // Sử dụng sự kiện blur để kiểm tra dữ liệu khi mất focus khỏi trường nhập liệu
@@ -173,7 +172,7 @@ document.addEventListener("DOMContentLoaded", function() {
     document.getElementById("identificationNumber").addEventListener("blur", function() {
         let identificationNumber = this.value.trim();
         if (!validateIdentificationNumber(identificationNumber)) {
-            showError("identificationNumber", "Số CMND không hợp lệ. Vui lòng chỉ nhập số.");
+            showError("identificationNumber", "Số không hợp lệ.(CMND:10 số/ CCCD:12 số)");
             this.value = "";
             this.focus();
         } else {
@@ -181,6 +180,37 @@ document.addEventListener("DOMContentLoaded", function() {
         }
     });
 
+    // =====================================validate password =======================================
+    document.getElementById("password").addEventListener('blur',function (){
+        var password = this.value;
+        if (!validatePassword(password)) {
+            // Mật khẩu không hợp lệ, thực hiện hành động tương ứng ở đây
+            showError("password1","Mật khẩu không hợp lệ! Mật khẩu phải có ít nhất 8 kí tự và phải có chữ hoa, chữ thường và kí tự đặc biệt.");
+            // Ví dụ: reset lại giá trị của ô nhập mật khẩu
+            this.value = "";
+            this.focus();
+        } else {
+            hideError("password1");
+        }
+    });
+
+    function validatePassword(password) {
+        // Kiểm tra độ dài
+        if (password.length < 8) {
+            return false; // Mật khẩu không đủ dài
+        }
+
+        // Kiểm tra chứa ít nhất một chữ hoa, một chữ thường và một ký tự đặc biệt
+        var hasUppercase = /[A-Z]/.test(password);
+        var hasLowercase = /[a-z]/.test(password);
+        var hasSpecialChar = /[!@#$%^&*()_+\-=[\]{};':"\\|,.<>/?]/.test(password);
+
+        if (!hasUppercase || !hasLowercase || !hasSpecialChar) {
+            return false; // Mật khẩu không đủ mạnh
+        }
+
+        return true; // Mật khẩu hợp lệ
+    }
     // ============================================END===============================================
 
 

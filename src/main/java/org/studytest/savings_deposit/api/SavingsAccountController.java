@@ -11,7 +11,7 @@ import java.util.List;
 import java.util.UUID;
 
 @RestController
-@RequestMapping("/api/v1/savings-accounts")
+    @RequestMapping("/api/v1/savings-accounts")
 public class SavingsAccountController {
 
     @Autowired
@@ -29,10 +29,10 @@ public class SavingsAccountController {
             return ResponseEntity.notFound().build();
         }
     }
-    @GetMapping("/list/{identification_number}")
-    public ResponseEntity<List<SavingsAccount>> getAllSavingsAccounts(@PathVariable String identification_number) {
+    @GetMapping("/list/{bankAccountId}")
+    public ResponseEntity<List<SavingsAccount>> getAllSavingsAccounts(@PathVariable String bankAccountId) {
         // Gọi service để lấy tất cả các tài khoản tiết kiệm cho customerId
-        List<SavingsAccount> savingsAccounts = savingsAccountService.getAllSavingsAccountsByCustomer(identification_number);
+        List<SavingsAccount> savingsAccounts = savingsAccountService.getAllSavingsAccountsByCustomer(bankAccountId);
         return ResponseEntity.ok(savingsAccounts);
     }
 
@@ -45,7 +45,6 @@ public class SavingsAccountController {
         return ResponseEntity.ok(message);
     }
 
-    // tao moi mọt
     @PutMapping("/{id}")
     public ResponseEntity<String> updateSavingsAccount(@PathVariable Long id) {
         // Gọi service để cập nhật thông tin của tài khoản tiết kiệm

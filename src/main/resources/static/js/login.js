@@ -1,4 +1,5 @@
 document.addEventListener('DOMContentLoaded', function() {
+    document.getElementById("username").focus();
     var loginForm = document.getElementById('login-form');
     loginForm.addEventListener('submit', function(event) {
         event.preventDefault();

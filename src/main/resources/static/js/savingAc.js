@@ -49,8 +49,8 @@ if (!userInfo || Object.keys(userInfo).length === 0) {
     window.location.href = "/login";
 } else {
     // Hiển thị thông tin người dùng trong trang
-    document.getElementById('stk').innerText = 'Số tài khoản: ' + userInfo.identificationNumber;
-    console.log(userInfo.identificationNumber) ;
+    document.getElementById('stk').innerText = 'Số tài khoản: ' + userInfo.bankAccountNumber;
+    // console.log(userInfo.bankAccountNumber) ;
     // format tien
     var balances = userInfo.account.balance ;
     console.log(balances) ;
@@ -61,7 +61,7 @@ if (!userInfo || Object.keys(userInfo).length === 0) {
     document.getElementById('blance').innerText = 'Số dư tài khoản: ' + balanceNew ;
     var result = userInfo.account.balance ;
     console.log(result) ;
-    document.getElementById('depositAmount').addEventListener('input', function() {
+    document.getElementById('depositAmount').addEventListener('blur', function() {
 
         var inputValue = parseFloat(this.value.replace(/[^\d.]/g, '')); // Lọc chỉ giữ lại các kí tự số và dấu chấm
         var formattedValue = inputValue.toLocaleString('en-US'); // Format số tiền với dấu phẩy
@@ -74,6 +74,8 @@ if (!userInfo || Object.keys(userInfo).length === 0) {
         if (inputValue <= parseFloat(result)) {
             if(inputValue < 3000000) {
                 document.getElementById('error').innerText = 'Vui lòng nhập số tiền lớn hơn 3,000,000';
+                this.value="";
+                this.focus();
             }
 
             else{document.getElementById('error').innerText = '';} // Xóa thông báo lỗi nếu có

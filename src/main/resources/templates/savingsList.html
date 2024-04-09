@@ -20,6 +20,22 @@
             text-align: center;
             color: white;
         }
+        #closeModal,
+        #withdraw {
+            padding: 10px 20px; /* Kích thước nút */
+            background-color: #007bff; /* Màu nền */
+            color: white; /* Màu chữ */
+            border: none; /* Không có viền */
+            border-radius: 5px; /* Bo tròn góc */
+            cursor: pointer; /* Con trỏ chuột khi di chuột vào nút */
+            margin-right: 10px; /* Khoảng cách phía bên phải giữa các nút */
+        }
+
+        #closeModal:hover,
+        #withdraw:hover {
+            background-color: #0056b3; /* Màu nền khi di chuột vào */
+        }
+
     </style>
 </head>
 <body>
@@ -44,6 +60,14 @@
         <div id="savingsInfo"></div>
         <button id="closeModal">Đóng</button>
         <button id="withdraw">Tất toán</button>
+    </div>
+</div>
+<div id="passwordDialog" class="modal">
+    <div class="modal-content">
+        <span class="close">&times;</span>
+        <h2>Vui lòng nhập mật khẩu để tất toán sổ tiết kiệm:</h2>
+        <label for="passwordInput"></label><input type="password" id="passwordInput">
+        <button id="confirmButton">Xác nhận</button>
     </div>
 </div>
 

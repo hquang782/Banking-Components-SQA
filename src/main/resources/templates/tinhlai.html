@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tính Lãi Sổ Tiết Kiệm</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f8f9fa;
+        }
+        .container {
+            max-width: 400px;
+            margin: 50px auto;
+            padding: 30px;
+            border: 1px solid #ced4da;
+            border-radius: 5px;
+            background-color: #fff;
+            box-shadow: 0px 0px 10px 0px rgba(0,0,0,0.1);
+        }
+        .form-group {
+            margin-bottom: 20px;
+        }
+        label {
+            display: block;
+            margin-bottom: 8px;
+            color: #495057;
+            font-weight: bold;
+        }
+        input[type="number"] {
+            width: 100%;
+            padding: 10px;
+            border-radius: 5px;
+            border: 1px solid #ced4da;
+            box-sizing: border-box;
+        }
+        input[type="range"] {
+            width: 100%;
+            -webkit-appearance: none;
+            appearance: none;
+            height: 8px;
+            border-radius: 5px;
+            background: #d3d3d3;
+            outline: none;
+            margin-top: 8px;
+        }
+        input[type="range"]::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 16px;
+            height: 16px;
+            border-radius: 50%;
+            background: #007bff;
+            cursor: pointer;
+        }
+        input[type="range"]::-moz-range-thumb {
+            width: 16px;
+            height: 16px;
+            border: none;
+            border-radius: 50%;
+            background: #007bff;
+            cursor: pointer;
+        }
+        button {
+            padding: 12px 24px;
+            background-color: #007bff;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+        button:hover {
+            background-color: #0056b3;
+        }
+        #result {
+            margin-top: 20px;
+            color: #155724;
+        }
+        .error {
+            color: red;
+            font-size: 0.9em;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2 style="text-align: center;">Tính Lãi Sổ Tiết Kiệm</h2>
+        <div class="form-group">
+            <label for="principal">Số Tiền Gốc:</label>
+            <input type="number" id="principal" placeholder="Nhập số tiền gốc...">
+            <span id="principalError" class="error"></span>
+        </div>
+        <div class="form-group">
+            <label for="interestRate">Lãi Suất (%/năm): <span id="interestRateValue">0</span></label>
+            <input type="range" id="interestRate" min="0" max="10" step="0.1" value="0">
+            <span id="interestRateError" class="error"></span>
+        </div>
+        <div class="form-group">
+            <label for="month">Kỳ hạn (tháng):</label>
+            <input type="number" id="month" placeholder="Nhập kỳ hạn...">
+            <span id="monthError" class="error"></span>
+        </div>
+        <button onclick="validateAndCalculate()">Tính Toán</button>
+        <div id="result"></div>
+    </div>
+    <script>
+        document.getElementById('interestRate').addEventListener('input', function() {
+            document.getElementById('interestRateValue').textContent = this.value;
+        });
+
+        function validateAndCalculate() {
+            var principal = parseFloat(document.getElementById('principal').value);
+            var interestRate = parseFloat(document.getElementById('interestRate').value);
+            var months = parseFloat(document.getElementById('month').value);
+
+            var principalError = document.getElementById('principalError');
+            var interestRateError = document.getElementById('interestRateError');
+            var monthError = document.getElementById('monthError');
+
+            principalError.textContent = "";
+            interestRateError.textContent = "";
+            monthError.textContent = "";
+
+            if (principal <= 0 || isNaN(principal)) {
+                principalError.textContent = "Số tiền gốc phải là số dương và lớn hơn 0.";
+                return;
+            }
+
+            if (interestRate <= 0 || isNaN(interestRate)) {
+                interestRateError.textContent = "Lãi suất phải là số dương và lớn hơn 0.";
+                return;
+            }
+
+            if (months <= 0 || isNaN(months)) {
+                monthError.textContent = "Kỳ hạn phải là số dương và lớn hơn 0.";
+                return;
+            }
+            let date;
+            console.log(months/12)
+            // if(months%12>0)
+            // {
+            //     date=365*Math.trunc(months/12)
+            //     date=date+365
+            //     date=date-(12-months%12)*30
+            //     console.log(date)
+            // }
+            // else if(months%12===0)
+            //     date=(months/12)*365
+            // else date=months*30
+            if(months%12>=0)
+            {
+                date=Math.trunc(months/12)*365+months%12*30
+            }
+            else date=months*30
+            console.log(date)
+            let interest = principal * interestRate / 100 * date / 365;
+            let totalAmount = principal + interest;
+
+            document.getElementById('result').innerHTML = "<p>Số tiền lãi : " + Math.round(interest) + " VND </p><p>Tổng Số Tiền: " + Math.round(totalAmount) + " VND </p>";
+        }
+        
+    </script>
+</body>
+</html>
