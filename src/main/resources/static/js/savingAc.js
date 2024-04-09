@@ -72,7 +72,12 @@ if (!userInfo || Object.keys(userInfo).length === 0) {
 
         // Kiểm tra nếu giá trị nhập vào thỏa mãn điều kiện
         if (inputValue <= parseFloat(result)) {
-            document.getElementById('error').innerText = ''; // Xóa thông báo lỗi nếu có
+            if(inputValue < 3000000) {
+                document.getElementById('error').innerText = 'Vui lòng nhập số tiền lớn hơn 3,000,000';
+            }
+
+            else{document.getElementById('error').innerText = '';} // Xóa thông báo lỗi nếu có
+
             // Tiếp tục xử lý hoặc thực hiện các hành động khác ở đây
         }
         else if(isNaN(inputValue)){

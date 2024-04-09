@@ -52,7 +52,7 @@ document.addEventListener("DOMContentLoaded", function () {
         savingsInfo.innerHTML = `
             <p>Tên sổ tiết kiệm: ${saving.accountName}</p>
             <p>Số tiền: ${formatCurrency(saving.depositAmount)} VND</p>
-            <p>Lãi suất: ${saving.interestRateValue}</p>
+            <p>Lãi suất: ${saving.interestRateValue}%</p>
             <p>Ngày gửi: ${saving.depositDate}</p>
             <p>Kỳ hạn: ${saving.term}</p>
             <p>Ngày đáo hạn: ${saving.maturityDate}</p>

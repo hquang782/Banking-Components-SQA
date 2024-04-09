@@ -39,7 +39,7 @@
       <div class="form-group">
         <label for="depositAmount" >Số tiền gửi:</label>
         <input style="position: relative;" type="text" id="depositAmount" oninput="formatCurrency(this)"
-               required>
+               required placeholder="Nhập số tiền tối thiểu là 3,000,000 VND">
         <span class="currency" style="position: absolute; margin-top: -21px;margin-left: 475px;">VND</span>
       </div>
       <span id="error" style="color: red "  class="error"></span>
@@ -48,11 +48,19 @@
         <label for="term">Kỳ hạn:</label>
         <select id="term" name="term" onchange="searchInterestRate()" required>
           <option value="">Chọn kỳ hạn</option>
+
           <option value="1 tháng">1 tháng</option>
+          <option value="2 tháng">2 tháng</option>
           <option value="3 tháng">3 tháng</option>
+          <option value="5 tháng">5 tháng</option>
           <option value="6 tháng">6 tháng</option>
-          <option value="1 năm">1 năm</option>
-          <option value="2 năm">2 năm</option>
+          <option value="9 tháng">9 tháng</option>
+          <option value="12 tháng">12 tháng</option>
+          <option value="13 tháng">13 tháng</option>
+          <option value="15 tháng">15 tháng</option>
+          <option value="18 tháng">18 tháng</option>
+          <option value="24 tháng">24 tháng</option>
+          <option value="36 tháng">36 tháng</option>
         </select>
       </div>
 
