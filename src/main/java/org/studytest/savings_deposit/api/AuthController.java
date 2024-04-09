@@ -35,4 +35,13 @@ public class AuthController {
         String response = authService.register(registerDto);
         return new ResponseEntity<>(response, HttpStatus.CREATED);
     }
+    @PostMapping("/verifyPassword")
+    public ResponseEntity<String> verifyPassword(@RequestBody LoginDto loginDto ){
+        CustomerDTO response = authService.login(loginDto);
+        if (response == null) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(null);
+        } else {
+            return ResponseEntity.ok("Done");
+        }
+    }
 }

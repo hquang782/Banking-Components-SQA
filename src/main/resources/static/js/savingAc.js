@@ -102,14 +102,19 @@ function formatCurrency(input) {
             formattedValue = ',' + formattedValue;
         }
     }
-    // var numericValue = parseFloat(value);
-    console.log(formattedValue) ;
-    // Gán giá trị đã định dạng vào trường nhập
-    // document.getElementById('depositAmount').innerText = formattedValue ;
+
+    // console.log(formattedValue) ;
     input.value = formattedValue;
-
 }
+function convertToDouble(amount) {
+    // Loại bỏ dấu phẩy từ chuỗi
+    var cleanedAmount = amount.replace(/,/g, '');
 
+    // Chuyển đổi chuỗi thành số dạng thập phân
+    var doubleValue = parseFloat(cleanedAmount);
+
+    return doubleValue;
+}
 // lưu dữ liệu được nhập vào localStorage
 document.getElementById('saveAccountForm').addEventListener('submit', function(event) {
     event.preventDefault(); // Ngăn chặn gửi form mặc định
@@ -130,7 +135,7 @@ document.getElementById('saveAccountForm').addEventListener('submit', function(e
         savingsType: savingsType,
         depositDate: depositDate,
         maturityDate: formatMaturityDate(calculateMaturityDate(depositDate, term)),
-        depositAmount: depositAmount,
+        depositAmount: convertToDouble(depositAmount),
         term: term,
         status:"active",
         interestRateValue: interestRateValue,
@@ -138,12 +143,8 @@ document.getElementById('saveAccountForm').addEventListener('submit', function(e
     };
     localStorage.setItem('savingsAccountInfo', JSON.stringify(savingsAccountInfo));
 
-    // Hiển thị thông báo
-    // alert('Dữ liệu đã được lưu vào localStorage!');
     window.location.href = "/confirmSA";
 
-    // Có thể chuyển hướng trang sau khi lưu dữ liệu nếu cần
-    // window.location.href = "new-page.html";
 });
 
 // ===============================function to calculate maturity date===========================
@@ -184,22 +185,4 @@ function formatMaturityDate(maturityDate) {
     var formattedDate = year + "-" + month + "-" + day;
 
     return formattedDate;
-}
-
-
-
-// lấy thông tin đã nhập từ form đăng kí sổ tiết kiệm nếu click nút quay lại
-// Lấy thông tin người dùng từ localStorage
-var userInfo = JSON.parse(localStorage.getItem('userInfo'));
-
-// Kiểm tra xem userInfo có giá trị hay không
-if (!userInfo || Object.keys(userInfo).length === 0) {
-    // Nếu userInfo trống, chuyển hướng đến trang đăng nhập
-    window.location.href = "/login";
-} else {
-    // Hiển thị thông tin người dùng trong trang
-    document.getElementById('user-avatar').src = "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQV3XeKXPIxJP-R6Hg0d2x2DCxnKV_sT04umGCOTuiNIQ&s";
-    document.getElementById('welcome-message').innerText = 'Chào, ' + userInfo.fullName;
-    document.getElementById('account-number').innerText = 'Số tài khoản: ' + userInfo.bankAccountNumber;
-    document.getElementById('balance').innerText = 'Số dư tài khoản: ' + userInfo.account.balance.toLocaleString('vi-VN') + 'VND';
 }

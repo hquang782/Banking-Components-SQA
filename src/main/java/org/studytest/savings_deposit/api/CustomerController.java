@@ -35,6 +35,17 @@ public class CustomerController {
         return customerOptional.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
     }
 
+//    cập nhật customer để lưu vào localstorage
+    @GetMapping("/updateCustomer/{accountId}")
+    public ResponseEntity<CustomerDTO> getNewCustomer(@PathVariable UUID accountId){
+        CustomerDTO response = customerService.getCustomerByAccountId(accountId);
+        if (response == null) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(null);
+        } else {
+            return ResponseEntity.ok(response);
+        }
+    }
+
 
     // Cập nhật thông tin của một khách hàng
     @PutMapping("/{id}")

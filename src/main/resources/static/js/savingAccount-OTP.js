@@ -90,7 +90,7 @@ function verifyOTP() {
                     // Phản hồi thành công từ API tạo tài khoản tiết kiệm
                     alert('Tạo tài khoản thành công!');
                     localStorage.removeItem('savingsAccountInfo');
-                    console.log(userInfo.account)
+                    // console.log(userInfo.account)
                     // Gửi yêu cầu PUT đến API để cập nhật thông tin tài khoản
                     return fetch('http://127.0.0.1:8080/api/v1/customers/updateBalance/' + userInfo.account.id, {
                         method: 'PUT',

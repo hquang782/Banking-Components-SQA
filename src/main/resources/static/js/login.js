@@ -12,7 +12,6 @@ document.addEventListener('DOMContentLoaded', function() {
         };
 
         // Thực hiện yêu cầu POST đến API
-        // Thực hiện yêu cầu POST đến API
         fetch('http://127.0.0.1:8080/api/auth/login', {
             method: 'POST',
             headers: {

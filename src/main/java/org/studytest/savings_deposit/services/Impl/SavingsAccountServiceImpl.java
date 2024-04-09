@@ -9,6 +9,7 @@ import org.studytest.savings_deposit.models.Customer;
 
 import org.studytest.savings_deposit.models.InterestRate;
 import org.studytest.savings_deposit.models.SavingsAccount;
+import org.studytest.savings_deposit.payload.CustomerDTO;
 import org.studytest.savings_deposit.payload.SavingsAccountDTO;
 
 import org.studytest.savings_deposit.repositories.SavingsAccountRepository;
@@ -121,8 +122,20 @@ public class SavingsAccountServiceImpl implements SavingsAccountService {
                 LocalDate newMaturityDate = currentDate.plusMonths(getTermInMonths(existingAccount.getTerm()));
                 existingAccount.setMaturityDate(convertToDate(newMaturityDate));
 
-                // Cập nhật depositAmount
-                existingAccount.setDepositAmount(existingAccount.getTotalAmount());
+                if(existingAccount.getInterestPaymentMethod().equals("Lãi nhập gốc")){
+                    // Cập nhật depositAmount
+                    existingAccount.setDepositAmount(existingAccount.getTotalAmount());
+                }
+                else{
+                    //chuyển tiền lãi về tài khoản nguồn
+                    Customer customer = existingAccount.getCustomer();
+                    Account account = customer.getAccount();
+                    Double money = account.getBalance();
+                    account.setBalance(money+ existingAccount.getTotalAmount()- existingAccount.getDepositAmount());
+                    customer.setAccount(account);
+                    existingAccount.setCustomer(customer);
+                }
+
 
                 // Lấy lãi suất mới theo term
                 InterestRate interestRate = interestRateService.getInterestRateByTerm(existingAccount.getTerm());
