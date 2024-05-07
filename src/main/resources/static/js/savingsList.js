@@ -186,7 +186,6 @@ function fetchAndUpdateUserInfo(userInfo) {
                     id: data.account.id,
                     username: data.account.username,
                     balance: data.account.balance,
-                    roles: data.account.roles
                 }
             };
             // Lưu userInfo vào localStorage

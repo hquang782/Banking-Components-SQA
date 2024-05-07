@@ -44,7 +44,6 @@ document.addEventListener('DOMContentLoaded', function() {
                             id: data.account.id,
                             username: data.account.username,
                             balance: data.account.balance,
-                            roles: data.account.roles
                         }
                     };
                     localStorage.setItem('userInfo', JSON.stringify(userInfo));

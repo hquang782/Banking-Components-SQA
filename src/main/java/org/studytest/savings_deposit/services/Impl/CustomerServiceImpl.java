@@ -1,8 +1,8 @@
 package org.studytest.savings_deposit.services.Impl;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;
-import org.studytest.savings_deposit.mappers.AccountMapper;
 import org.studytest.savings_deposit.mappers.CustomerMapper;
 import org.studytest.savings_deposit.models.Account;
 import org.studytest.savings_deposit.models.Customer;
@@ -23,15 +23,13 @@ public class CustomerServiceImpl implements CustomerService {
     private final CustomerRepository customerRepository;
     private final CustomerMapper customerMapper;
 
-    private final AccountMapper accountMapper;
     private final AccountRepository accountRepository;
 
     @Autowired
-    public CustomerServiceImpl( CustomerRepository customerRepository,CustomerMapper customerMapper, AccountMapper accountMapper,AccountRepository accountRepository) {
+    public CustomerServiceImpl( CustomerRepository customerRepository,CustomerMapper customerMapper,AccountRepository accountRepository) {
         this.accountRepository = accountRepository;
         this.customerRepository = customerRepository;
         this.customerMapper = customerMapper;
-        this.accountMapper = accountMapper;
     }
 
     @Override
@@ -77,21 +75,20 @@ public class CustomerServiceImpl implements CustomerService {
 
     @Override
     public String deleteCustomer(Long id) {
-        Customer customer = customerRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Customer not found with id: " + id));
-
-        customerRepository.deleteById(id);
-
-        return "Customer with id " + id + " deleted successfully.";
+        try {
+            customerRepository.deleteById(id);
+            return "Customer with id " + id + " deleted successfully.";
+        } catch (EmptyResultDataAccessException e) {
+            throw new IllegalArgumentException("Customer not found with id: " + id);
+        }
     }
+
 
     public String  updateAccount(UUID accountId, AccountDTO accountDTO) {
         Optional<Account> optionalAccount = accountRepository.findById(accountId);
         if (optionalAccount.isPresent()) {
             Account account = optionalAccount.get();
             // Cập nhật thông tin tài khoản từ DTO
-//            account.setUsername(accountDTO.getUsername());
-//            account.setPassword(accountDTO.getPassword());
             account.setBalance(accountDTO.getBalance());
             // Lưu lại thông tin tài khoản đã cập nhật vào repository
             accountRepository.save(account);

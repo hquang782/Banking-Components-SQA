@@ -244,7 +244,7 @@ public class SavingsAccountServiceImpl implements SavingsAccountService {
     }
 
     @Override
-    public void updateAllSavingsAccounts() {
+    public String updateAllSavingsAccounts() {
         // Lấy tất cả các sổ tiết kiệm trong hệ thống
         List<SavingsAccount> allSavingsAccounts = savingsAccountRepository.findSavingsAccountByStatus("active");
 
@@ -252,6 +252,7 @@ public class SavingsAccountServiceImpl implements SavingsAccountService {
         for (SavingsAccount savingsAccount : allSavingsAccounts) {
            updateSavingsAccount(savingsAccount.getId());
         }
+        return "update success!";
     }
 
     public static long daysBetween(Date startDate, Date endDate) {

@@ -1,6 +1,5 @@
 package org.studytest.savings_deposit.services.Impl;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.studytest.savings_deposit.mappers.InterestRateMapper;
 import org.studytest.savings_deposit.models.InterestRate;
@@ -14,11 +13,15 @@ import java.util.stream.Collectors;
 
 @Service
 public class InterestRateServiceImpl implements InterestRateService {
-    @Autowired
-    private InterestRateRepository interestRateRepository;
+    private final InterestRateRepository interestRateRepository;
 
-    @Autowired
-    private InterestRateMapper interestRateMapper;
+    private final InterestRateMapper interestRateMapper;
+
+    public InterestRateServiceImpl(InterestRateRepository interestRateRepository, InterestRateMapper interestRateMapper) {
+        this.interestRateRepository = interestRateRepository;
+        this.interestRateMapper = interestRateMapper;
+    }
+
     @Override
     public InterestRate getInterestRateById(Long id) {
         Optional<InterestRate> interestRateOptional = interestRateRepository.findById(id);
@@ -32,7 +35,7 @@ public class InterestRateServiceImpl implements InterestRateService {
         InterestRate interestRate =  interestRateRepository.findByTerm(term);
         if (interestRate != null) {
             // In ra thông tin của lãi suất
-            System.out.println("Thông tin lãi suất: " + interestRate.toString());
+            System.out.println("Thông tin lãi suất: " + interestRate);
         } else {
             // In ra thông báo cho biết không tìm thấy lãi suất
             System.out.println("Không tìm thấy lãi suất cho kỳ hạn: " + term);
