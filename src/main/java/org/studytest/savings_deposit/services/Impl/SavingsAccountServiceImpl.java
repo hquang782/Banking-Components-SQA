@@ -2,45 +2,28 @@ package org.studytest.savings_deposit.services.Impl;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.studytest.savings_deposit.mappers.CustomerMapper;
-import org.studytest.savings_deposit.mappers.SavingsAccountMapper;
 import org.studytest.savings_deposit.models.Account;
 import org.studytest.savings_deposit.models.Customer;
-
 import org.studytest.savings_deposit.models.InterestRate;
 import org.studytest.savings_deposit.models.SavingsAccount;
-import org.studytest.savings_deposit.payload.CustomerDTO;
 import org.studytest.savings_deposit.payload.SavingsAccountDTO;
-
 import org.studytest.savings_deposit.repositories.SavingsAccountRepository;
 import org.studytest.savings_deposit.services.CustomerService;
 import org.studytest.savings_deposit.services.InterestRateService;
 import org.studytest.savings_deposit.services.SavingsAccountService;
 
-import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.ZoneId;
-import java.util.Date;
-import java.util.List;
-import java.util.Optional;
-import java.util.UUID;
+import java.util.*;
 
 
 @Service
 public class SavingsAccountServiceImpl implements SavingsAccountService {
     private final SavingsAccountRepository savingsAccountRepository;
 
-    @Autowired
-    private SavingsAccountMapper savingsAccountMapper;
+    private final InterestRateService interestRateService;
 
-    @Autowired
-    private InterestRateService interestRateService;
-
-    @Autowired
-    private CustomerService customerService;
-
-    @Autowired
-    private CustomerMapper customerMapper;
+    private final CustomerService customerService;
 
 
     @Autowired
@@ -63,7 +46,11 @@ public class SavingsAccountServiceImpl implements SavingsAccountService {
     @Override
     public List<SavingsAccount> getAllSavingsAccountsByCustomer(String identification_number) {
         Optional<Customer> customer = customerService.getCustomerByIdentificationNumber(identification_number);
-        return getAllSavingsAccountsByCustomerId(customer.get().getId());
+        if (customer.isPresent()) {
+            return getAllSavingsAccountsByCustomerId(customer.get().getId());
+        } else {
+            return Collections.emptyList();
+        }
     }
 
 
@@ -72,7 +59,7 @@ public class SavingsAccountServiceImpl implements SavingsAccountService {
 
         InterestRate interestRate = interestRateService.getInterestRateByTerm(savingsAccountDTO.getTerm());
         Optional<Customer> customer = customerService.getCustomerByBankAccountNumber(bankAccountNumber);
-        if (interestRate != null) {
+        if (interestRate != null&& customer.isPresent()) {
             // Sinh ra một số tài khoản mới và duy nhất
             String accountNumber = UUID.randomUUID().toString();
 
@@ -169,16 +156,11 @@ public class SavingsAccountServiceImpl implements SavingsAccountService {
         if (length == 2) {
             int num = Integer.parseInt(parts[0]);
             String unit = parts[1];
-            switch (unit) {
-                case "tháng":
-                    months = num;
-                    break;
-                case "năm":
-                    months = num * 12;
-                    break;
-                default:
-                    months = 0;
-            }
+            months = switch (unit) {
+                case "tháng" -> num;
+                case "năm" -> num * 12;
+                default -> 0;
+            };
         } else {
             months = 0;
         }

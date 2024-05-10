@@ -2,20 +2,19 @@ package org.studytest.savings_deposit.api;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
-import org.studytest.savings_deposit.models.Customer;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 import org.studytest.savings_deposit.payload.CustomerDTO;
 import org.studytest.savings_deposit.payload.LoginDto;
 import org.studytest.savings_deposit.payload.RegisterDto;
-
 import org.studytest.savings_deposit.services.AuthService;
-
-import java.util.UUID;
 
 @RestController
 @RequestMapping("/api/auth")
 public class AuthController {
-    private AuthService authService;
+    private final AuthService authService;
 
     public AuthController(AuthService authService) {
         this.authService = authService;

@@ -1,6 +1,5 @@
 package org.studytest.savings_deposit.services.Impl;
 
-import lombok.SneakyThrows;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.studytest.savings_deposit.models.Account;
@@ -11,7 +10,6 @@ import org.studytest.savings_deposit.repositories.AccountRepository;
 import org.studytest.savings_deposit.services.AuthService;
 import org.studytest.savings_deposit.services.CustomerService;
 
-import javax.security.auth.login.AccountNotFoundException;
 import java.util.Optional;
 
 
@@ -38,7 +36,7 @@ public class AuthServiceImpl implements AuthService {
             if (passwordEncoder.matches(loginDto.getPassword(), encodedPassword)) {
                 return customerService.getCustomerByAccountId(account.getId());
             }
-            else System.out.println("sai");
+            else System.out.println("wrong password");
         }
         else System.out.println("not found");
         return null;
@@ -78,12 +76,10 @@ public class AuthServiceImpl implements AuthService {
     }
 
     private Account createAccount(String username, String password) {
-        // Tạo mới người dùng
         Account newAccount = new Account();
         newAccount.setUsername(username);
         newAccount.setPassword(passwordEncoder.encode(password));
         accountRepository.save(newAccount);
         return newAccount;
     }
-
 }

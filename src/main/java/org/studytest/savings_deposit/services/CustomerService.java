@@ -9,11 +9,8 @@ import java.util.Optional;
 import java.util.UUID;
 
 public interface CustomerService {
-    List<CustomerDTO> getAllCustomers();
     Optional<Customer> getCustomerById(Long id);
     String createCustomer(CustomerDTO customerDTO);
-    Customer updateCustomer(Long id,Customer customer);
-    String deleteCustomer(Long id);
     Optional<Customer> getCustomerByIdentificationNumber(String identificationNumber);
     Optional<Customer> getCustomerByBankAccountNumber(String bankAccountNumber);
     CustomerDTO getCustomerByAccountId(UUID account_id);
