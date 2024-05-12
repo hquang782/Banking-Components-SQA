@@ -11,7 +11,7 @@
     <h2>User Registration</h2>
     <form id="registrationForm">
         <label for="fullName">Họ và tên:</label>
-        <input type="text" id="fullName" name="fullName" required>
+        <input type="text" id="fullName" name="fullName" maxlength="60" required>
         <div class="error" id="fullNameError"></div>
 
         <label for="gender">Giới tính:</label>
@@ -30,7 +30,7 @@
         <input type="hidden" id="age" name="age" >
 
         <label for="address">Địa chỉ:</label>
-        <input type="text" id="address" name="address" required>
+        <input type="text" id="address" name="address" maxlength="200" required>
 
         <label for="email">Email:</label>
         <input type="email" id="email" name="email" required>

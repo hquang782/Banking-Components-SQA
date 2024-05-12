@@ -71,26 +71,25 @@ if (!userInfo || Object.keys(userInfo).length === 0) {
 
 
         // Kiểm tra nếu giá trị nhập vào thỏa mãn điều kiện
-        if (inputValue <= parseFloat(result)) {
+        if (inputValue < parseFloat(result)) {
             if(inputValue < 3000000) {
                 document.getElementById('error').innerText = 'Vui lòng nhập số tiền lớn hơn 3,000,000';
                 this.value="";
                 this.focus();
             }
-
             else{document.getElementById('error').innerText = '';} // Xóa thông báo lỗi nếu có
 
-            // Tiếp tục xử lý hoặc thực hiện các hành động khác ở đây
+        }
+        else if(inputValue >= parseFloat(result))  {
+            // Nếu không thỏa mãn điều kiện, hiển thị thông báo lỗi màu đỏ
+            document.getElementById('error').innerText = 'Vui Lòng Nhập Giá Trị Nhỏ Hơn Số Dư';
+            this.value = "" ;
         }
         else if(isNaN(inputValue)){
                 this.value="" ;
                 document.getElementById('error').innerText = 'Vui lòng nhập giá trị số';
         }
-            else {
-                this.value = "" ;
-            // Nếu không thỏa mãn điều kiện, hiển thị thông báo lỗi màu đỏ
-            document.getElementById('error').innerText = 'Vui Lòng Nhập Giá Trị Nhỏ Hơn Số Dư';
-        }
+
     });
 }
 

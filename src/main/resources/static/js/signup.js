@@ -134,7 +134,7 @@ document.addEventListener("DOMContentLoaded", function() {
         let email = this.value.trim();
         if (!validateAddress(email)) {
             this.value = "";
-            this.focus();
+            // this.focus();
         } else {
             hideError("email");
         }
