@@ -16,7 +16,6 @@ public class ScheduledTasks {
     // Chạy cập nhật tất cả sổ tiết kiệm sau mỗi ngày
     @Scheduled(cron = "0 0 0 * * *")
     public void updateAllSavingsAccounts() {
-        // Gọi phương thức cập nhật từ service
-        System.out.println(savingsAccountService.updateAllSavingsAccounts());
+        savingsAccountService.updateAllSavingsAccounts();
     }
 }

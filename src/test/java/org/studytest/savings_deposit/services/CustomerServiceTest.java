@@ -37,28 +37,21 @@ public class CustomerServiceTest {
     private CustomerServiceImpl customerService;
     @Test
     void testGetCustomerByAccountId() {
-        // Tạo một tài khoản giả định
         Account mockAccount = new Account();
         mockAccount.setId(UUID.randomUUID());
         mockAccount.setUsername("test");
         mockAccount.setPassword("test");
-        // Tạo một Customer giả định
         Customer customer = new Customer();
         customer.setId(1L);
         customer.setFullName("John Doe");
         customer.setAccount(mockAccount);
-        // Tạo một CustomerDTO giả định
         CustomerDTO expectedCustomerDTO = new CustomerDTO();
         expectedCustomerDTO.setFullName("John Doe");
-        // Mock phương thức findCustomerByAccount_Id của customerRepository để trả về một Optional chứa customer giả định
         when(customerRepository.findCustomerByAccount_Id(any(UUID.class)))
                 .thenReturn(customer);
-        // Mock phương thức convertToDTO của customerMapper để trả về expectedCustomerDTO
         when(customerMapper.convertToDTO(customer))
                 .thenReturn(expectedCustomerDTO);
-        // Gọi phương thức getCustomerByAccountId với accountId
         CustomerDTO result = customerService.getCustomerByAccountId(mockAccount.getId());
-        // Kiểm tra xem kết quả trả về có đúng hay không
         assertEquals(expectedCustomerDTO, result);
     }
 

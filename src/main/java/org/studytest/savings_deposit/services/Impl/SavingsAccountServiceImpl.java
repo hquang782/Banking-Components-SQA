@@ -169,7 +169,11 @@ public class SavingsAccountServiceImpl implements SavingsAccountService {
 
     // Hàm chuyển đổi từ Date sang LocalDate
     private LocalDate convertToLocalDate(Date dateToConvert) {
-        return dateToConvert.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+        if (dateToConvert instanceof java.sql.Date) {
+            return ((java.sql.Date) dateToConvert).toLocalDate();
+        } else {
+            return dateToConvert.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+        }
     }
 
     // Hàm chuyển đổi từ LocalDate sang Date
@@ -199,7 +203,7 @@ public class SavingsAccountServiceImpl implements SavingsAccountService {
             long numOfDay = daysBetween(existingAccount.getDepositDate(),maturityDate);
             InterestRate interestRate = interestRateService.getInterestRateByTerm("Không kỳ hạn");
             double interestRateValue = interestRate.getRate();
-//            nếu gửi và rút cùng ngày thì không có lãi
+            //  nếu gửi và rút cùng ngày thì không có lãi
             if(numOfDay<=1){
                 interestRateValue =0;
             }
@@ -219,7 +223,7 @@ public class SavingsAccountServiceImpl implements SavingsAccountService {
             // Lưu đối tượng SavingsAccount đã cập nhật vào cơ sở dữ liệu
             savingsAccountRepository.save(existingAccount);
 
-            return "Savings account matured successfully. Interest earned: " + interestAmount;
+            return "Savings account matured successfully.";
         } else {
             return "Savings account not found";
         }

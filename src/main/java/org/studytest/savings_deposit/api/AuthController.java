@@ -32,7 +32,8 @@ public class AuthController {
     @PostMapping(value = {"/register", "/signup"})
     public ResponseEntity<String> register(@RequestBody RegisterDto registerDto) {
         String response = authService.register(registerDto);
-        return new ResponseEntity<>(response, HttpStatus.CREATED);
+        if(response.equals("Registration successful")) return new ResponseEntity<>(response, HttpStatus.CREATED);
+        else return new ResponseEntity<>(response,HttpStatus.BAD_REQUEST);
     }
     @PostMapping("/verifyPassword")
     public ResponseEntity<String> verifyPassword(@RequestBody LoginDto loginDto ){
