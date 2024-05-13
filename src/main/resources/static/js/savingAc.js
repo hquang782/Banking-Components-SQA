@@ -84,10 +84,12 @@ if (!userInfo || Object.keys(userInfo).length === 0) {
             // Nếu không thỏa mãn điều kiện, hiển thị thông báo lỗi màu đỏ
             document.getElementById('error').innerText = 'Vui Lòng Nhập Giá Trị Nhỏ Hơn Số Dư';
             this.value = "" ;
+            this.focus() ;
         }
         else if(isNaN(inputValue)){
                 this.value="" ;
                 document.getElementById('error').innerText = 'Vui lòng nhập giá trị số';
+                this.focus() ;
         }
 
     });
