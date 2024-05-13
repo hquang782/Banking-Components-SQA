@@ -75,7 +75,7 @@ if (!userInfo || Object.keys(userInfo).length === 0) {
             if(inputValue < 3000000) {
                 document.getElementById('error').innerText = 'Vui lòng nhập số tiền lớn hơn 3,000,000';
                 this.value="";
-                this.focus();
+                this.focus() ;
             }
             else{document.getElementById('error').innerText = '';} // Xóa thông báo lỗi nếu có
 
