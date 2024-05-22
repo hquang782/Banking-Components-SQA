@@ -14,9 +14,11 @@ import java.util.UUID;
     @RequestMapping("/api/v1/savings-accounts")
 public class SavingsAccountController {
 
-    @Autowired
-    private SavingsAccountService savingsAccountService;
+    private final SavingsAccountService savingsAccountService;
 
+    public SavingsAccountController(SavingsAccountService savingsAccountService) {
+        this.savingsAccountService = savingsAccountService;
+    }
 
 
     @GetMapping("/{id}")
